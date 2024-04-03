@@ -31,7 +31,7 @@ function Status(){
     };
 
     return (
-        <div class="dflex ai-stretch">
+        <div className="dflex ai-stretch">
             <Sidebar userName="Hrithik M"/>
             <div style={ styles.mainContent}>
                 <div className="w100 dflex jc-around tcenter">

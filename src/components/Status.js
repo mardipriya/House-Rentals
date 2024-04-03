@@ -6,12 +6,12 @@ import data from './../components-data/StatusData'
 
 function Status(){
     return (
-        <div class="dflex ai-stretch">
+        <div className="dflex ai-stretch">
             <Sidebar userName="Hrithik M"/>
             <div className="dflex jc-around" style={ styles.mainContent}>
                 <Paper elevation={5} sx={{width : "80%", padding : "32px"}}>
                     { !data['hasApplied']  ? 
-                        <div class="w100 tcenter">
+                        <div className="w100 tcenter">
                             <h3> You have not applied to any Apartments.  </h3>
                         </div>
 
@@ -35,9 +35,9 @@ function Status(){
                             <p> Flat Number : { data.flatNumber } </p>
                             <p> Owner Name : { data.ownerName} </p>
                             <p> Owner Contact : {data.ownerContact}</p>
-                            <div className="dflex">
-                                <Button variant="outlined"> View Apartment Details </Button>
-                            </div>
+                            {/* <div className="dflex">
+                                <Button variant="outlined" > View Apartment Details </Button>
+                            </div> */}
                         </div>
                     }
                 </Paper>

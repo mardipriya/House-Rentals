@@ -5,7 +5,7 @@ const userData = JSON.parse(localStorage.getItem('userData'));
 
 const Sidebar = ({ userName }) => {
   // var isAdmin = userData.isAdmin ;
-  var isAdmin = true;
+  var isAdmin = false;
   return (
     <div style={styles.sidebar}>
       <div style={styles.userInfo}>
@@ -21,17 +21,24 @@ const Sidebar = ({ userName }) => {
               <Link to="/status" style={styles.link}>Check Status</Link>
             </li>
           }
-          { !isAdmin && 
-            <li style={styles.menuItem}>
-              <Link to="/status" style={styles.link}>Payments Status</Link>
-            </li>
-          }
           {
             isAdmin && 
             <li style={styles.menuItem}>
               <Link to="/update-status" style={styles.link}>Update Status</Link>
             </li>
           }
+
+          { !isAdmin && 
+            <li style={styles.menuItem}>
+              <Link to="/your-payments" style={styles.link}>Payments</Link>
+            </li>
+          }
+          { isAdmin && 
+            <li style={styles.menuItem}>
+              <Link to="/your-payments" style={styles.link}>View Payments</Link>
+            </li>
+          }
+          
           
           { isAdmin && 
           <li style={styles.menuItem}>
@@ -43,6 +50,19 @@ const Sidebar = ({ userName }) => {
             <Link to="/raise-complaints" style={styles.link}>Raise Complaints</Link>
           </li>
           }
+          
+          {/* { !isAdmin && 
+          <li style={styles.menuItem}>
+            <Link to="/submitted-docs" style={styles.link}>Submitted Docs</Link>
+          </li>
+          }
+          
+          { isAdmin && 
+          <li style={styles.menuItem}>
+            <Link to="/raise-complaints" style={styles.link}>User Docs</Link>
+          </li>
+          } */}
+
           { !isAdmin && 
             <li style={styles.menuItem}>
               <Link to="/your-lease" style={styles.link}>Your Lease</Link>

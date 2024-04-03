@@ -7,7 +7,8 @@ import StatusPage from './components/Status';
 import RegisterComplaint from './components/RegisterComplaint';
 import ViewComplaints from './components/ViewComplaints';
 import ViewApartment from './components/ViewApartment';
-import LeaseDetail from './components/LeaseDetail'
+import LeaseDetail from './components/LeaseDetail';
+import Payments from './components/Payments';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/view-complaints" element = { <ViewComplaints/> }></Route>
         <Route path="/your-lease" element = { <LeaseDetail/> }></Route>
         <Route path="/apartment" element={ <ViewApartment/> }></Route>
+        <Route path="your-payments" element= { < Payments/> } ></Route>
       </Routes>
     </Router>
   );

@@ -27,9 +27,10 @@ function FilterBox( props ){
 
     const handleSearch = ()=>{
         const date = new Date(selectedDate);
-        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        const formattedDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+        console.log(type+" "+formattedDate);
         props.updateType(type);
-        props.updateDate(formattedDate)
+        props.updateDate(formattedDate);
     }
 
     return (

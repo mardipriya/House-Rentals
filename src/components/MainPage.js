@@ -6,6 +6,7 @@ import LeaseOptions from './LeaseOptions'
 
 import FilterBox from './FilterBox'
 
+import leaseOptions from './../components-data/LeaseOptionsData';
 
 const headingStyle = {
     fontSize : "64px",
@@ -23,6 +24,38 @@ const searchBoxStyle = {
 }
 
 function MainPage(){
+
+    const [data, setData] = React.useState(leaseOptions);
+    React.useEffect(() => {
+        console.log("Data Updated : "+data);
+    }, [data]);
+
+    const [filterDate, setFilterDate] = React.useState(null)
+    const [filterType, setFilterType] = React.useState(null)
+
+    const updateFilterDate = (date)=>{
+        const filteredData = leaseOptions.filter(item => {
+            const itemDate = new Date(item['avail-from']).getTime();
+            const filterDateTime = new Date(filterDate).getTime();
+            console.log("Option Date "+item['avail-from']+" "+itemDate);
+            console.log("Filter Date "+filterDate+" "+filterDateTime);
+            return itemDate >= filterDateTime;
+        });
+        setData(filteredData);
+        setFilterDate(date);
+    }
+
+    const updateFilterType = (type)=>{
+        console.log("Came Here bro "+type)
+        const filteredData = leaseOptions.filter(item => {
+            return item['bedrooms'] === type;
+        });
+        console.log(filteredData);
+        setData(filteredData);
+        console.log(data);
+        setFilterType(type);
+    }
+
     
     return (
         <div>
@@ -34,11 +67,12 @@ function MainPage(){
                     </h1>
                 </div>
             </div>
-            <FilterBox style={searchBoxStyle}/>
-            <LeaseOptions fromPage={"Main"}/>
+            <FilterBox updateType={updateFilterType} updateDate={updateFilterDate} style={searchBoxStyle}/>
+                <LeaseOptions date={filterDate} type={filterType} fromPage={"Main"} arr={data}/>
             <Footer/>
         </div>
     )
 }
+
 
 export default MainPage;
