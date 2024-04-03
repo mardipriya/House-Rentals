@@ -9,6 +9,10 @@ import ViewComplaints from './components/ViewComplaints';
 import ViewApartment from './components/ViewApartment';
 import LeaseDetail from './components/LeaseDetail';
 import Payments from './components/Payments';
+import UpdateStatus from './components/UpdateStatus';
+import FixComplaints from './components/FixComplaints';
+import UpdatePayments from './components/UpdatePayments';
+import GivenLeases from './components/GivenLeases';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -24,7 +28,11 @@ function App() {
         <Route path="/view-complaints" element = { <ViewComplaints/> }></Route>
         <Route path="/your-lease" element = { <LeaseDetail/> }></Route>
         <Route path="/apartment" element={ <ViewApartment/> }></Route>
-        <Route path="your-payments" element= { < Payments/> } ></Route>
+        <Route path="/your-payments" element= { < Payments/> } ></Route>
+        <Route path="/update-status" element= { < UpdateStatus/> } ></Route>
+        <Route path="/fix-complaints" element= { < FixComplaints/> } ></Route>
+        <Route path="/update-payments" element= { < UpdatePayments/> } ></Route>
+        <Route path="/lease-list" element= { < GivenLeases/> } ></Route>
       </Routes>
     </Router>
   );

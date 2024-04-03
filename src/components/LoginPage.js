@@ -1,8 +1,12 @@
 import * as React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import Header from "./Header";
 import Footer from "./Footer";
 import { TextField, Button, Container, Typography } from '@mui/material';
+
+import { withRouter } from 'react-router-dom';
 
 import { loginUser } from '../apis';
 
@@ -25,6 +29,8 @@ const useStyles = {
 };
 
 function LoginPage(){
+
+  let navigate = useNavigate();
 
   if( localStorage.getItem('isLoggedIn') ){
     window.location.href = '/home'
@@ -68,15 +74,31 @@ function LoginPage(){
   };
 
   const handleLoginSubmit = async (event) => {
-    try {
-      const userData = await loginUser(userEmail, password);
-      console.log('User logged in:', userData);
-      alert("Login Successful ");
-      // Handle successful login, such as storing user data or redirecting to another page
-    } catch (error) {
-      console.error('Login failed:', error.message);
-      alert("Login Failed")
-      // Handle login error, such as displaying an error message to the user
+
+    if(userEmail === 'chakri123@gmail.com' && password=='123456'){
+      console.log("Came here")
+      var userData = {
+        userName : 'Chakradhar Reddy',
+        isAdmin : false,
+        hasLease : true,
+        apartmentNumber : 4030, 
+        flatNumber : 120,
+      }
+      localStorage.setItem('userData', JSON.stringify(userData));
+      navigate("/home")
+    }
+    else if(userEmail === 'admin@gmail.com' && password=='123456'){
+      console.log("Came here admin")
+      var userData = {
+        userName : 'Chakradhar Reddy',
+        isAdmin : true, 
+        hasLease : false
+      }
+      localStorage.setItem('userData', JSON.stringify(userData));
+      navigate("/home");
+    }
+    else{
+      alert("Invalid User Login. Please check Again !");
     }
   }
 

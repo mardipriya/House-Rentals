@@ -32,7 +32,7 @@ function Status(){
 
     return (
         <div className="dflex ai-stretch">
-            <Sidebar userName="Hrithik M"/>
+            <Sidebar userName="Chakradhar"/>
             <div style={ styles.mainContent}>
                 <div className="w100 dflex jc-around tcenter">
                     <Button onClick={handleClickOpen} variant="outlined"> + Create a New Complaint </Button>

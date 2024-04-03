@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 function Status(){
     return (
         <div className="dflex ai-stretch">
-            <Sidebar userName="Hrithik M"/>
+            <Sidebar userName="Chakradhar"/>
             <div style={ styles.mainContent}>
                 
             </div>

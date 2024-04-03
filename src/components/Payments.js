@@ -25,7 +25,7 @@ function Payments(){
 
     return (
         <div className="dflex ai-stretch">
-            <Sidebar userName="Hrithik M"/>
+            <Sidebar userName="Chakradhar"/>
             <div className="dflex jc-around" style={ styles.mainContent}>
                 <Paper elevation={5} sx={{width : "80%", padding : "32px"}}>
                     { !hasApplied  ? 

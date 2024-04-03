@@ -5,7 +5,10 @@ const userData = JSON.parse(localStorage.getItem('userData'));
 
 const Sidebar = ({ userName }) => {
   // var isAdmin = userData.isAdmin ;
-  var isAdmin = false;
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  
+  var isAdmin = userData.isAdmin;
+
   return (
     <div style={styles.sidebar}>
       <div style={styles.userInfo}>
@@ -13,9 +16,11 @@ const Sidebar = ({ userName }) => {
       </div>
       <div style={styles.menu}>
         <ul style={styles.menuList}>
+          
           <li style={styles.menuItem}>
             <Link to="/home" style={styles.link}>Search Property</Link>
           </li>
+
           { !isAdmin && 
             <li style={styles.menuItem}>
               <Link to="/status" style={styles.link}>Check Status</Link>
@@ -35,7 +40,7 @@ const Sidebar = ({ userName }) => {
           }
           { isAdmin && 
             <li style={styles.menuItem}>
-              <Link to="/your-payments" style={styles.link}>View Payments</Link>
+              <Link to="/update-payments" style={styles.link}>Update Payments</Link>
             </li>
           }
           
@@ -70,7 +75,7 @@ const Sidebar = ({ userName }) => {
           }
           { isAdmin && 
             <li style={styles.menuItem}>
-              <Link to="/your-lease" style={styles.link}>Given Leases</Link>
+              <Link to="/lease-list" style={styles.link}>Given Leases</Link>
             </li>
           }
           <li style={styles.menuItem}>

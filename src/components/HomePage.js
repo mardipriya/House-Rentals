@@ -45,7 +45,7 @@ function HomePage(){
 
     return (
         <div className="dflex ai-stretch">
-            <Sidebar userName="Hrithik M"/>
+            <Sidebar userName="Chakradhar"/>
             <div style={ styles.mainContent}>
                 <FilterBox updateType={updateFilterType} updateDate={updateFilterDate} style={filterBoxStyle}/>
                 <LeaseOptions date={filterDate} type={filterType} fromPage={"Home"} arr={data}/>
