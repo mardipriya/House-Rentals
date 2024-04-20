@@ -3,6 +3,7 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import Carousel from './Carousel';
 
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody,  Select, MenuItem} from '@mui/material';
 
 
@@ -48,13 +49,17 @@ function UpdateStatus(){
         console.log("Updated data:", updatedData);
       }, [updatedData]); 
 
-    // const handleChangeStatus = (event, index) => {
-    //   const updatedStatus = event.target.value;
-    //   const newData = [...updatedData];
-    //   newData[index]["Current Status"] = updatedStatus;
-    //   console.log(newData);
-    //   setUpdatedData(newData);
-    // };
+      const [openDialog, setOpenDialog] = React.useState(false);
+      const [selectedUser, setSelectedUser] = React.useState(null);
+      
+      const handleClickUser = (user) => {
+          setSelectedUser(user);
+          setOpenDialog(true);
+      };
+      
+      const handleCloseDialog = () => {
+          setOpenDialog(false);
+      };
 
     const handleChangeStatus = (event, index) => {
         const updatedStatus = event.target.value;
@@ -94,14 +99,26 @@ function UpdateStatus(){
                                 <MenuItem value="Approved">Approved</MenuItem>
                                 <MenuItem value="Rejected">Declined</MenuItem>
                               </Select>
-                            ) : (
-                              row[column]
-                            )}
+                            ) : ( column === "Applied By" ? <a onClick={() => handleClickUser(row["Applied By"])} href="#"> {row[column]} </a>: row[column])}
                           </TableCell>
                         ))}
                         </TableRow>
                     ))}
                     </TableBody>
+                    <Dialog sx={{ width : "100%"}} open={openDialog} onClose={handleCloseDialog}>
+                        <DialogTitle>User Details</DialogTitle>
+                        <DialogContent>
+                            {selectedUser && (
+                                <div>
+                                    <p><strong>User Name:</strong> {selectedUser}</p>
+                                    {/* Add more user details here if needed */}
+                                </div>
+                            )}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
                 </Table>
                 </Paper>
             </div>

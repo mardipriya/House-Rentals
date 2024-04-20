@@ -4,7 +4,7 @@ const leaseOptions = [
             "apt-number" : "4030",
             "flat-number" : "302",
             "image" : "sample-1.avif",
-            "bedrooms" : 2,
+            "bedrooms" : 1,
             "avail-from" : "06-02-2024"
         },
         {
@@ -28,7 +28,7 @@ const leaseOptions = [
             "apt-number" : "4030",
             "flat-number" : "305",
             "image" : "sample-3.avif",
-            "bedrooms" : 2,
+            "bedrooms" : 3,
             "avail-from" : "04-07-2024"
         },
         {
@@ -36,7 +36,7 @@ const leaseOptions = [
             "apt-number" : "4030",
             "flat-number" : "302",
             "image" : "sample-4.avif",
-            "bedrooms" : 2,
+            "bedrooms" : 3,
             "avail-from" : "04-02-2024"
         },
         {
@@ -52,7 +52,7 @@ const leaseOptions = [
             "apt-number" : "4030",
             "flat-number" : "205",
             "image" : "sample-2.avif",
-            "bedrooms" : 2,
+            "bedrooms" : 3,
             "avail-from" : "05-02-2024"
         },
         {
@@ -60,7 +60,7 @@ const leaseOptions = [
             "apt-number" : "4030",
             "flat-number" : "305",
             "image" : "sample-1.avif",
-            "bedrooms" : 2,
+            "bedrooms" : 3,
             "avail-from" : "07-02-2024"
         }
 ]

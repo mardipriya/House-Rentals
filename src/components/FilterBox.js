@@ -29,8 +29,7 @@ function FilterBox( props ){
         const date = new Date(selectedDate);
         const formattedDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
         console.log(type+" "+formattedDate);
-        props.updateType(type);
-        props.updateDate(formattedDate);
+        props.updateFilter(date, type);
     }
 
     return (
@@ -61,7 +60,7 @@ function FilterBox( props ){
                 </DemoContainer>
             </LocalizationProvider>
 
-            <Button variant="contained" style={{height : "100%", width:"20%"}} onClick={handleSearch}> Search </Button>
+            <Button variant="contained" style={{height : "100%", width:"20%"}} onClick={() => handleSearch()}> Search </Button>
         </div>
     </div>
     );

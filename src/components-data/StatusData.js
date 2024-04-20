@@ -21,6 +21,7 @@ const statusData = {
     thumbnail : "https://atlas-content-cdn.pixelsquid.com/assets_v2/158/1581395264726373462/jpeg-600/G03.jpg",
     progress : 99,
     status : "Rejected",
+    additionalInfo : "Rejected due to less income, please try again after 6 months",
     ownerName : "Richard Smith",
     ownerContact : "+1 909 909 9090"
 }

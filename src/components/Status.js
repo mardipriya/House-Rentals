@@ -5,6 +5,11 @@ import LinearProgress from '@mui/joy/LinearProgress';
 import data from './../components-data/StatusData'
 
 function Status(){
+
+    const handleApply = function(){
+        window.location.href = '/home'
+    }
+
     return (
         <div className="dflex ai-stretch">
             <Sidebar userName="Chakradhar"/>
@@ -30,6 +35,13 @@ function Status(){
                                 variant="solid"
                             />
 
+                            {/* Displaying more information incase of the rejection  */}
+    
+                            { data.status == "Rejected" && 
+                            
+                                <p> Additional Info : {data.additionalInfo} </p>
+                            }
+
                             <h4> Application Details : </h4>
                             <p> Apartment Number : {data.apartmentNumber} </p>
                             <p> Flat Number : { data.flatNumber } </p>
@@ -38,6 +50,7 @@ function Status(){
                             {/* <div className="dflex">
                                 <Button variant="outlined" > View Apartment Details </Button>
                             </div> */}
+                            <Button variant="outlined" onClick={ handleApply }> Apply to Other Apartments</Button>
                         </div>
                     }
                 </Paper>

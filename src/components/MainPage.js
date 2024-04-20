@@ -33,29 +33,16 @@ function MainPage(){
     const [filterDate, setFilterDate] = React.useState(null)
     const [filterType, setFilterType] = React.useState(null)
 
-    const updateFilterDate = (date)=>{
+    const updateFilter = (date, type)=>{
         const filteredData = leaseOptions.filter(item => {
             const itemDate = new Date(item['avail-from']).getTime();
-            const filterDateTime = new Date(filterDate).getTime();
-            console.log("Option Date "+item['avail-from']+" "+itemDate);
-            console.log("Filter Date "+filterDate+" "+filterDateTime);
-            return itemDate >= filterDateTime;
+            const filterDateTime = new Date(date).getTime();
+            return itemDate >= filterDateTime && item['bedrooms'] === type;
         });
         setData(filteredData);
         setFilterDate(date);
-    }
-
-    const updateFilterType = (type)=>{
-        console.log("Came Here bro "+type)
-        const filteredData = leaseOptions.filter(item => {
-            return item['bedrooms'] === type;
-        });
-        console.log(filteredData);
-        setData(filteredData);
-        console.log(data);
         setFilterType(type);
     }
-
     
     return (
         <div>
@@ -67,8 +54,8 @@ function MainPage(){
                     </h1>
                 </div>
             </div>
-            <FilterBox updateType={updateFilterType} updateDate={updateFilterDate} style={searchBoxStyle}/>
-                <LeaseOptions date={filterDate} type={filterType} fromPage={"Main"} arr={data}/>
+            <FilterBox updateFilter={updateFilter} style={searchBoxStyle}/>
+                <LeaseOptions fromPage={"Main"} arr={data}/>
             <Footer/>
         </div>
     )
