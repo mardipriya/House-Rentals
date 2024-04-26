@@ -91,7 +91,7 @@ function AdminPayments() {
                                     <TableCell align="right">Status</TableCell>
                                     <TableCell align="right">Transaction Details</TableCell>
                                     <TableCell align="right">User</TableCell>
-                                    <TableCell align="right">Actions</TableCell>
+                                    {/* <TableCell align="right">Actions</TableCell> */}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -102,9 +102,9 @@ function AdminPayments() {
                                         <TableCell align="right">{payment.status}</TableCell>
                                         <TableCell align="right">{payment.transactionDetails}</TableCell>
                                         <TableCell align="right">{payment.user}</TableCell>
-                                        <TableCell align="right">
+                                        {/* <TableCell align="right">
                                             <Button onClick={() => handleOpenDialog(payment)}>Update</Button>
-                                        </TableCell>
+                                        </TableCell> */}
                                     </TableRow>
                                 ))}
                             </TableBody>

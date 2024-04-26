@@ -27,7 +27,7 @@ function App() {
         <Route path="/raise-complaints" element= { <RegisterComplaint/> }></Route>
         <Route path="/view-complaints" element = { <ViewComplaints/> }></Route>
         <Route path="/your-lease" element = { <LeaseDetail/> }></Route>
-        <Route path="/apartment" element={ <ViewApartment/> }></Route>
+        <Route path="/apartment/:id" element={ <ViewApartment/> }></Route>
         <Route path="/your-payments" element= { < Payments/> } ></Route>
         <Route path="/update-status" element= { < UpdateStatus/> } ></Route>
         <Route path="/fix-complaints" element= { < FixComplaints/> } ></Route>

@@ -8,22 +8,22 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import { getAllUserPayments } from './ServerRequests';
+
 function Payments() {
     const hasApplied = true;
+    const [payments, setPayments] = React.useState(null);
     const [open, setOpen] = React.useState(false);
     const [paymentType, setPaymentType] = React.useState('');
     const [accountNumber, setAccountNumber] = React.useState('');
     const [routingNumber, setRoutingNumber] = React.useState('');
 
-    const payments = {
-        Advance: [1000, "Paid", "TX00232N12"],
-        CarParking: [50, "Paid", "TX00232N82"],
-        CleaningFee: [120, "Paid", "TX20232N12"],
-        WaterBill: [30, "Not Paid", "-"],
-        ElectricityBill: [30, "Not Paid", "-"],
-        MaintenanceFee: [80, "Paid", "TX03232N12"],
-        // Add more payment types as needed
-    };
+    React.useEffect(() => {
+        const userId = localStorage.getItem('userId'); 
+        getAllUserPayments(userId).then(data => {
+            setPayments(data.payments);
+        }).catch(error => console.error('Failed to fetch payments:', error));
+    }, []);
 
     const handleClickOpen = (paymentType) => {
         setOpen(true);
@@ -77,13 +77,15 @@ function Payments() {
                                     </TableHead>
                                     <TableBody>
                                         {/* Render advance payment */}
-                                        {Object.entries(payments).map(([paymentType, details]) => {
+                                        {payments && Object.entries(payments).map(([key, payment]) => {
                                             return (
-                                                <TableRow key={paymentType}>
-                                                    <TableCell component="th" scope="row">{paymentType}</TableCell>
-                                                    <TableCell align="right">${details[0]}</TableCell>
-                                                    <TableCell sx={{ color: details[1] === "Paid" ? "green" : "red", fontWeight: "bold" }} align="right">{details[1] === "Paid" ? details[1] : <a href='#' onClick={() => handleClickOpen(paymentType)}>Pay Now</a>}</TableCell>
-                                                    <TableCell align="right">{details[2]}</TableCell>
+                                                <TableRow key={key}>
+                                                    <TableCell component="th" scope="row">{payment.description}</TableCell>
+                                                    <TableCell align="right">${payment.amount}</TableCell>
+                                                    <TableCell sx={{ color: payment.status === "Paid" ? "green" : "red", fontWeight: "bold" }} align="right">
+                                                        {payment.status === "Paid" ? payment.status : <a href="#" onClick={() => handleClickOpen(payment.description)}>Pay Now</a>}
+                                                    </TableCell>
+                                                    <TableCell align="right">{payment.transactionId.toUpperCase()}</TableCell>
                                                 </TableRow>
                                             );
                                         })}

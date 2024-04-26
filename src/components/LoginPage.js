@@ -8,7 +8,7 @@ import { TextField, Button, Container, Typography } from '@mui/material';
 
 import { withRouter } from 'react-router-dom';
 
-import { loginUser } from '../apis';
+import { loginUser, registerUser } from './ServerRequests';
 
 const useStyles = {
   root: {
@@ -74,42 +74,42 @@ function LoginPage(){
   };
 
   const handleLoginSubmit = async (event) => {
+      event.preventDefault();
 
-    if(userEmail === 'chakri123@gmail.com' && password=='123456'){
-      console.log("Came here")
-      var userData = {
-        userName : 'Chakradhar Reddy',
-        isAdmin : false,
-        hasLease : true,
-        apartmentNumber : 4030, 
-        flatNumber : 120,
+      try {
+        const response = await loginUser(userEmail, password);
+        if( response.message=== 'User logged in successfully'){
+          localStorage.setItem('isAdmin',response.user.isAdmin);
+          localStorage.setItem('userId', response.user.userId);
+          localStorage.setItem('fullName', response.user.fullName);
+          window.location.href = '/home';
+        }
+        else{
+          alert(response.message);
+        }
+      } catch (error) {
+        alert("An error occurred during login:", error);
       }
-      localStorage.setItem('userData', JSON.stringify(userData));
-      navigate("/home")
-    }
-    else if(userEmail === 'admin@gmail.com' && password=='123456'){
-      console.log("Came here admin")
-      var userData = {
-        userName : 'Chakradhar Reddy',
-        isAdmin : true, 
-        hasLease : false
-      }
-      localStorage.setItem('userData', JSON.stringify(userData));
-      navigate("/home");
-    }
-    else{
-      alert("Invalid User Login. Please check Again !");
-    }
   }
 
-  const handleRegisterSubmit = (event) => {
+  const handleRegisterSubmit = async (event) => {
     event.preventDefault();
-    console.log('First Name:', firstName);
-    console.log('Last Name:', lastName);
-    console.log('Email:', userEmail);
-    console.log('Mobile Number:', mobileNumber);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+    const payload = {
+      firstName : firstName,
+      lastName : lastName,
+      email : userEmail,
+      password : password,
+      isAdmin : false,
+      phoneNumber : mobileNumber,
+      currentAddress : '123',
+      annualIncome : '000'
+    }
+    const response = await registerUser(payload);
+    console.log(response);
+    alert(response.message);
+    if( response.message === "User signed up successfully" ){
+      setType('login');
+    }
   };
 
   

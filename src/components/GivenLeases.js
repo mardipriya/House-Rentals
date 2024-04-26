@@ -3,24 +3,19 @@ import { Paper, Button, Table, TableContainer, TableHead, TableRow, TableCell, T
 import Sidebar from './Sidebar';
 import data from './../components-data/ApartmentData';
 
+import { fetchAllLeases } from './ServerRequests';
+
 function GivenLeases() {
-    const currentLeases = [
-        {
-          apartmentNumber: 101,
-          flatNumber: 1,
-          userDetails: "John Doe"
-        },
-        {
-          apartmentNumber: 102,
-          flatNumber: 2,
-          userDetails: "Jane Smith"
-        },
-        {
-          apartmentNumber: 103,
-          flatNumber: 3,
-          userDetails: "Michael Johnson"
-        }
-      ];
+    const [leases, setLeases] = React.useState([]);
+
+    React.useEffect(() => {
+        fetchAllLeases().then(data => {
+            setLeases(data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }, []);
+
     
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedLease, setSelectedLease] = React.useState(null);
@@ -40,12 +35,6 @@ function GivenLeases() {
         handleMenuClose();
     };
 
-    const handleTransferLease = () => {
-        // Implement lease transfer logic here
-        console.log("Lease transferred:", selectedLease);
-        handleMenuClose();
-    };
-
     return (
         <div className="dflex ai-stretch">
             <Sidebar userName="Chakradhar" />
@@ -58,28 +47,25 @@ function GivenLeases() {
                                 <TableRow>
                                     <TableCell>Apartment Number</TableCell>
                                     <TableCell>Flat Number</TableCell>
-                                    <TableCell>User Details</TableCell>
+                                    <TableCell>User Name</TableCell>
+                                    <TableCell>User Contact</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {currentLeases.map((lease, index) => (
+                                {leases.map((lease, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{lease.apartmentNumber}</TableCell>
-                                        <TableCell>{lease.flatNumber}</TableCell>
+                                        <TableCell>{lease.apartmentDetails.apartmentNumber}</TableCell>
+                                        <TableCell>{lease.apartmentDetails.flatNumber}</TableCell>
                                         <TableCell>
-                                            <Link href="#">{lease.userDetails}</Link>
+                                            {lease.User.firstName}
                                         </TableCell>
                                         <TableCell>
-                                            <Button onClick={(event) => handleMenuOpen(event, lease)}>Options</Button>
-                                            <Menu
-                                                anchorEl={anchorEl}
-                                                open={Boolean(anchorEl)}
-                                                onClose={handleMenuClose}
-                                            >
-                                                <MenuItem onClick={handleTerminateLease}>Terminate Lease</MenuItem>
-                                                <MenuItem onClick={handleTransferLease}>Transfer Lease</MenuItem>
-                                            </Menu>
+                                            {lease.User.email}
+                                        </TableCell>
+                                        <TableCell>
+                                            
+                                                <Button onClick={handleTerminateLease}>Terminate Lease</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -91,6 +77,8 @@ function GivenLeases() {
         </div>
     );
 }
+
+
 
 const styles = {
     mainContent: {

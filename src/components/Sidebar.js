@@ -7,7 +7,11 @@ const Sidebar = ({ userName }) => {
   // var isAdmin = userData.isAdmin ;
   const userData = JSON.parse(localStorage.getItem('userData'));
   
-  var isAdmin = userData.isAdmin;
+  var isAdmin = localStorage.getItem('isAdmin')==='true';
+
+  const logoutUser = ()=>{
+    localStorage.clear();
+  }
 
   return (
     <div style={styles.sidebar}>
@@ -79,7 +83,9 @@ const Sidebar = ({ userName }) => {
             </li>
           }
           <li style={styles.menuItem}>
+            <a onClick={()=> logoutUser()}href ="#">
             <Link to="/login" style={styles.link}> Logout </Link>
+            </a>
           </li>
           { // Implement Docs Page
           /* <li style={styles.menuItem}>

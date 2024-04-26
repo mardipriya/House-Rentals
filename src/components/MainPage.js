@@ -6,6 +6,8 @@ import LeaseOptions from './LeaseOptions'
 
 import FilterBox from './FilterBox'
 
+import {fetchAvailableApartments} from './ServerRequests'; 
+
 import leaseOptions from './../components-data/LeaseOptionsData';
 
 const headingStyle = {
@@ -24,6 +26,9 @@ const searchBoxStyle = {
 }
 
 function MainPage(){
+
+    const response = fetchAvailableApartments();
+    console.log(response);
 
     const [data, setData] = React.useState(leaseOptions);
     React.useEffect(() => {

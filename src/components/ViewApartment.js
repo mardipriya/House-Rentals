@@ -12,10 +12,31 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import data from './../components-data/ApartmentData'
+import { useParams } from 'react-router-dom';
+
+import { fetchApartmentDetails, submitLeaseApplication } from './ServerRequests';
+
 
 function ViewApartment(){
 
+    let { id } = useParams();
+
+    const userId = localStorage.getItem('userId');
+
+    const [data, setData] = React.useState(null);
+
+    React.useEffect(() => {
+        async function fetchDetails() {
+            try {
+                const response = await fetchApartmentDetails(id);
+                setData(response);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
+        }
+        fetchDetails();
+
+    }, []);
 
     const [open, setOpen] = React.useState(false);
 
@@ -27,14 +48,26 @@ function ViewApartment(){
         setOpen(false);
     };
 
+    const submitLease = async (payload) =>{
+        const response = await submitLeaseApplication(userId, payload);
+        if( response.status == 200 ){
+            if( response.data ){
+                alert("Lease was successfully applied");
+            }
+        }
+        else{
+            alert(response.message)
+        }
+    }
+
     return (
         <div className="dflex ai-stretch">
             <Sidebar userName="Chakradhar"/>
             <div className="dflex jc-around" style={ styles.mainContent}>
-                <Paper elevation={5} sx={{width : "80%", padding : "32px"}}>
+                { data!==null && <Paper elevation={5} sx={{width : "80%", padding : "32px"}}>
                     <Carousel images={data.images}/>
-                    <h2>Apartment {data.apartmentNumber}</h2>
-                    <p>Location: {data.address.city}, {data.address.state}</p>
+                    <h2>Apartment {data.apartmentNumber} - {data.flatNumber}</h2>
+                    {/* <p>Location: {data.address.city}, {data.address.state}</p> */}
                     <p>Price: $ {data.pricePerMonth}/month</p>
                     <p>Bedrooms: {data.bedrooms} | Bathrooms: {data.bathrooms}</p>
                     <p>Description: {data.description}</p>
@@ -42,7 +75,7 @@ function ViewApartment(){
                     <p> Address : {data.apartmentNumber}-{data.flatNumber} , <br/> {data.address.lane}, <br/> 
                      {data.address.city}, {data.address.state} <br/>
                      {data.address.zip}
-                    </p>
+                     </p>
                     <p> Owner Name : {data.ownerName} </p>
                     <p> Owner Contact : {data.ownerContact}</p>
                     <div className="w100 tcenter dflex jc-around">
@@ -58,15 +91,12 @@ function ViewApartment(){
                                 const formData = new FormData(event.currentTarget);
                                 const formJson = Object.fromEntries(formData.entries());
                                 console.log(formJson);
-                                alert("Application Submitted Successfully !");
-                                const name = formJson.fullname;
-                                const email = formJson.email;
-                                const income = formJson.income;
-                                const people = formJson.people;
-                                const currentAddr = formJson["current-addr"];
-                                const applicationDate = new Date();
-                                const status = "Reported";
-                                //API
+                                try{
+                                    submitLease();
+                                }
+                                catch(error){
+                                    alert("There was some error, please try after sometime");
+                                }
                                 handleClose();
                             },
                             }}
@@ -137,6 +167,7 @@ function ViewApartment(){
 
                     </div>
                 </Paper>
+            }
             </div>
         </div>
     )

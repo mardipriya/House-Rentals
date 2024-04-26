@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
+
+import { createApartment, updateApartment,deleteApartment } from './ServerRequests';
 
 const containerStyle = {
     width: "100%",
@@ -17,14 +19,21 @@ function LeaseOptions(props) {
 
     const fromPage = "Admin";
 
+    const isAdmin = localStorage.getItem('isAdmin')==='true';
+
     const [openDialog, setOpenDialog] = useState(false);
     const [currentApartment, setCurrentApartment] = useState(null);
     const [dialogMode, setDialogMode] = useState('add'); // 'add' or 'edit'
     const [apartments, setApartments] = useState(props.arr);
+    
+    React.useEffect(() => {
+        setApartments(props.arr);
+    }, [props.arr]);
 
-    const handleOpenDialog = (apartment, mode) => {
+    const handleOpenDialog = (index, mode) => {
         setDialogMode(mode);
-        setCurrentApartment(apartment);
+        console.log(apartments)
+        setCurrentApartment({});
         setOpenDialog(true);
     };
 
@@ -33,38 +42,51 @@ function LeaseOptions(props) {
         setCurrentApartment(null);
     };
 
-    const handleDelete = (apartmentId) => {
-        const updatedList = apartments.filter(apartment => apartment.id !== apartmentId);
-        setApartments(updatedList);
-        // Optionally, perform API call to delete
-        alert("Deleted apartment with ID:", apartmentId);
+
+    const handleDelete = async (apartmentId) => {
+
+        try {
+            const response = await deleteApartment(apartmentId);
+            if (response.status === 200) {
+                setApartments(apartments.filter(apartment => apartment.apartmentDetails._id !== apartmentId));
+                alert("Apartment deleted successfully");
+            } else {
+                alert("Error: " + response.message);
+            }
+        } catch (error) {
+            console.error("Failed to delete apartment:", error);
+            alert("Failed to delete apartment.");
+        }
     };
 
-    const handleApply = ()=>{
+    const handleApply = (id)=>{
         if( props.fromPage === "Main"){
             window.location.href = '/login';
         }
         else{
-            window.location.href = '/apartment'
+            window.location.href = '/apartment/'+id;
         }
     }
 
-    const handleSave = (apartmentData, mode) => {
-        if (mode === 'add') {
-            setApartments([apartmentData, ...apartments]); // Prepend new apartment
-        } else {
-            const updatedApartments = apartments.map(apartment =>
-                apartment.id === apartmentData.id ? apartmentData : apartment
-            );
-            setApartments(updatedApartments);
+    const handleSave = async (apartmentData) => {
+        try {
+            const response = dialogMode === 'add' ? await createApartment(apartmentData) : await updateApartment(currentApartment._id, apartmentData);
+            if (response.status === 200) {
+                setApartments(dialogMode === 'add' ? [response.apartment, ...apartments] : apartments.map(apartment => apartment.apartmentDetails._id === currentApartment._id ? response.apartment : apartment));
+                handleCloseDialog();
+            } else {
+                alert("Error: " + response.message);
+            }
+        } catch (error) {
+            console.error("Failed to save apartment:", error);
+            alert("Failed to save apartment.");
         }
-        handleCloseDialog();
     };
 
     return (
         <div style={containerStyle}>
             <h1 className="tcenter">AVAILABLE FLOOR PLANS</h1>
-            {fromPage === "Admin" && (
+            {fromPage === "Admin" && isAdmin && (
                 <div style={newAptBtn}>
                     <Button variant="contained" color="primary" onClick={() => handleOpenDialog({}, 'add')}>
                         + New Apartment
@@ -74,21 +96,21 @@ function LeaseOptions(props) {
             <div className="dflex jc-around ai-center fwrap">
                 {apartments.map((object, i) => (
                     <Paper key={i} elevation={5} sx={{ position: 'relative', display: "flex", flexDirection: "column", textAlign: 'left', margin: '32px', padding: "48px" }}>
-                        {fromPage === "Admin" && (
+                        {fromPage === "Admin" && isAdmin && (
                             <>
-                                <Button style={{ position: 'absolute', top: '10px', left: '10px' }} onClick={() => handleDelete(object.id)}>×</Button>
-                                <Button style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={() => handleOpenDialog(object, 'edit')}>Edit</Button>
+                                <Button style={{ position: 'absolute', top: '10px', left: '10px' }} onClick={() => handleDelete(object.apartmentDetails._id)}>×</Button>
+                                <Button style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={() => handleOpenDialog(i, 'edit')}>Edit</Button>
                             </>
                         )}
                         <div className="w100 dflex jc-around">
-                            <img src={require('./../images/' + object['image'])} width="160px" height="160px" alt="Apartment"></img>
+                            <img src={require('./../images/' + 'sample-1.avif')} width="160px" height="160px" alt="Apartment"></img>
                         </div>
-                        <p>Apartment Number: {object['apt-number']}</p>
-                        <p>Flat Number: {object['flat-number']}</p>
-                        <p>Bedrooms: {object['bedrooms']}</p>
-                        <p>Available From: {object['avail-from']}</p>
-                        <Button style={{ marginBottom: "10px" }} variant="outlined" onClick={handleApply}>Apply Now!</Button>
-                        <Button variant="outlined"><a href={"mailto:mandhahrithik@gmail.com?subject=Apartment%20Enquiry&body=Hi%20Team%20I%20want%20to%20know%20about%20Apartment%20" + object['apt-number'] + "%20" + object['flat-number']}>Contact Us</a></Button>
+                        <p>Apartment Number: {object.apartmentDetails['apartmentNumber']}</p>
+                        <p>Flat Number: {object.apartmentDetails['flatNumber']}</p>
+                        <p>Bedrooms: {object.apartmentDetails['bedrooms']}</p>
+                        <p>Available From: {new Date(object.apartmentDetails['availableFrom']).toLocaleDateString()}</p>
+                        <Button style={{ marginBottom: "10px" }} variant="outlined" onClick={() => handleApply(object.apartmentDetails["_id"])}>Apply Now!</Button>
+                        <Button variant="outlined"><a href={"mailto:admin@gmail.com?subject=Apartment%20Enquiry&body=Hi%20Team%20I%20want%20to%20know%20about%20Apartment%20" + object['apt-number'] + "%20" + object['flat-number']}>Contact Us</a></Button>
                     </Paper>
                 ))}
             </div>
@@ -100,24 +122,83 @@ function LeaseOptions(props) {
 export default LeaseOptions;
 
 function ApartmentDialog({ open, onClose, onSave, apartment, mode }) {
-    const [formData, setFormData] = useState({ ...apartment });
+    // Initialize form state with empty or existing apartment data
+    const [formData, setFormData] = useState({
+        'aptartmentNumber': '',
+        'flatNumber': '',
+        'bedrooms': '',
+        'bathrooms': '',
+        'description': '',
+        'address': '',
+        'ownerName': '',
+        'ownerContact': '',
+        'amenities': '',
+        'images': ''
+    });
+
+    // Update form data when apartment data changes
+    useEffect(() => {
+        if (apartment && mode === 'edit') {
+            setFormData({
+                'apartmentNumber': apartment['apartmentNumber'] || '',
+                'flatNumber': apartment['flatNumber'] || '',
+                'bedrooms': apartment['bedrooms'] || '',
+                'bathrooms': apartment['bathrooms'] || '',
+                'description': apartment['description'] || '',
+                'address': '',
+                'ownerName': apartment['ownerName'] || '',
+                'ownerContact': apartment['ownerContact'] || '',
+                'amenities': apartment['amenities'] ? apartment['amenities'].join(', ') : '', // Assuming amenities is an array
+                'images': apartment['images'] ? apartment['images'].join(', ') : '' // Assuming images is an array
+            });
+        } else {
+            // Reset form when opening for adding new apartment
+            setFormData({
+                'apartmentNumber': '',
+                'flatNumber': '',
+                'bedrooms': '',
+                'bathrooms': '',
+                'description': '',
+                'address': '',
+                'ownerName': '',
+                'ownerContact': '',
+                'amenities': '',
+                'images': ''
+            });
+        }
+    }, [apartment, mode]); // React to changes in apartment or mode
 
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleSubmit = () => {
-        onSave(formData, mode);
+        // Convert amenities and images from comma-separated strings to arrays if needed
+        const dataToSave = {
+            ...formData,
+            amenities: formData.amenities.split(',').map(item => item.trim()),
+            images: formData.images.split(',').map(item => item.trim())
+        };
+        onSave(dataToSave, mode);
+        onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>{mode === 'add' ? 'Add New Apartment' : 'Edit Apartment Details'}</DialogTitle>
             <DialogContent>
-                <TextField label="Apartment Number" name="apt-number" value={formData['apt-number'] || ''} onChange={handleChange} fullWidth />
-                <TextField label="Flat Number" name="flat-number" value={formData['flat-number'] || ''} onChange={handleChange} fullWidth />
-                <TextField label="Bedrooms" name="bedrooms" value={formData['bedrooms'] || ''} onChange={handleChange} fullWidth />
-                <TextField label="Available From" name="avail-from" value={formData['avail-from'] || ''} onChange={handleChange} fullWidth />
+                {Object.keys(formData).map((key) => (
+                    <TextField
+                        key={key}
+                        sx={{ marginBottom: "12px" }}
+                        label={key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        name={key}
+                        value={formData[key]}
+                        onChange={handleChange}
+                        fullWidth
+                        multiline={key === 'description'}
+                    />
+                ))}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>

@@ -1,7 +1,10 @@
-const baseUrl = '';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:3001';
+const baseUrl = 'http://localhost:3001';
 
 
-const fetchComplaints = async () => {
+export const fetchComplaints = async () => {
     // Perform the API call to retrieve all complaints
     try {
         const response = await fetch(`${baseUrl}/api/getComplaints`, {
@@ -28,7 +31,7 @@ const fetchComplaints = async () => {
 }
 
 
-const fetchUserComplaints = async (userId) => {
+export const fetchUserComplaints = async (userId) => {
     // Perform the API call to retrieve all complaints
     try {
         const response = await fetch(`${baseUrl}/api/getComplaints/${userId}`, {
@@ -54,10 +57,10 @@ const fetchUserComplaints = async (userId) => {
     }
 }
 
-const addComplaint = async (userId, payload) => {
+export const addComplaint = async (userId, payload) => {
     // Perform the API call to add a new complaint
     try {
-        const response = await fetch(`${baseUrl}/api/complaints/userId`, {
+        const response = await fetch(`${baseUrl}/api/complaints/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +86,7 @@ const addComplaint = async (userId, payload) => {
 
 
 
-const updateComplaints = async (complaintId, payload) => {
+export const updateComplaints = async (complaintId, payload) => {
     // Perform the API call to update the complaint on the server
     try {
         const response = await fetch(`${baseUrl}/api/complaints/${complaintId}`, {
@@ -111,3 +114,238 @@ const updateComplaints = async (complaintId, payload) => {
 
 }
 
+export const loginUser = async (email, password) => {
+    try {
+
+        const response = await fetch(`${baseUrl}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email : email, password : password})
+        });
+
+        return await response.json();
+        } catch (error) {
+        // Handle network errors or other errors during the API call
+        return {
+            error: error.message
+        };
+    }
+  };
+
+
+export const fetchAvailableApartments = async () => {
+    try {
+
+        const response = await fetch(`${baseUrl}/api/getAvailableApartments`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        const data = await response.json();
+        if (response.status === 200) {
+            console.log(data);
+            return data;
+        } else {
+            return {
+                error : "Something went wrong"
+            }
+        }
+        } catch (error) {
+        // Handle network errors or other errors during the API call
+        return {
+            error: error.message
+        };
+    }
+  };
+
+
+  export const fetchApartmentDetails = async ( id ) => {
+    try {
+
+        const response = await fetch(`${baseUrl}/api/apartmentDetails/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        const data = await response.json();
+        if (response.status === 200) {
+            console.log(data);
+            return data;
+        } else {
+            return {
+                error : "Something went wrong"
+            }
+        }
+        } catch (error) {
+        // Handle network errors or other errors during the API call
+        return {
+            error: error.message
+        };
+    }
+  };
+
+export const submitLeaseApplication = async ( id, payload ) => {
+    try {
+
+        const response = await fetch(`${baseUrl}/api/applyLease/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        return await response.json();
+    }
+    catch(e){
+        console.log(e);
+    }
+};
+
+
+
+
+
+export const getAllUserPayments = async ( id ) => {
+    try {
+
+        const response = await fetch(`${baseUrl}/api/getAllRequiredPayments/6601dfe441c0a1a29a1984dc`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        return await response.json();
+    }
+    catch(e){
+        console.log(e);
+    }
+};
+
+
+export const addMemberToLease = async (userId, addUserId) => {
+    try {
+        const response = await fetch(`${baseUrl}/api/addMemberToLease/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ addUserId })
+        });
+        const data = await response.json();
+        if (response.status !== 200) throw new Error(data.message);
+        return data;
+    } catch (error) {
+        console.error('Error adding member:', error);
+        alert(error.message);
+    }
+};
+
+export const removeMemberFromLease = async (userId, removeUserId) => {
+    try {
+        const response = await fetch(`${baseUrl}/api/removeMemberFromLease/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ removeUserId })
+        });
+        const data = await response.json();
+        if (response.status !== 200) throw new Error(data.message);
+        return data;
+    } catch (error) {
+        console.error('Error removing member:', error);
+        alert(error.message);
+    }
+};
+
+export const createApartment = async (apartmentData) => {
+    try {
+        const response = await fetch('/api/createApartment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(apartmentData)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to create apartment');
+        }
+        return await response.json();  // Assuming the server returns the created apartment
+    } catch (error) {
+        console.error("Error creating apartment:", error);
+        throw error;  // Rethrow to handle it in the component
+    }
+};
+
+export const updateApartment = async (apartmentId, apartmentData) => {
+    try {
+        const response = await fetch(`/api/updateApartment/${apartmentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(apartmentData)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update apartment');
+        }
+        return await response.json();  // Assuming the server returns the updated apartment
+    } catch (error) {
+        console.error("Error updating apartment:", error);
+        throw error;  // Rethrow to handle it in the component
+    }
+};
+
+export const deleteApartment = async (apartmentId) => {
+    try {
+        const response = await fetch(`/api/deleteApartment/${apartmentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete apartment');
+        }
+        return await response.json();  // Assuming the server sends some confirmation message
+    } catch (error) {
+        console.error("Error deleting apartment:", error);
+        throw error;  // Rethrow to handle it in the component
+    }
+};
+
+
+export const fetchAllLeases = async () => {
+    try {
+        const response = await fetch('/api/getAllGivenLeases');
+        if (!response.ok) {
+            throw new Error('Failed to fetch leases');
+        }
+        const data = await response.json();
+        return data.leases;
+    } catch (error) {
+        console.error("Error fetching leases:", error);
+        throw error;
+    }
+};
+
+export const registerUser = async( payload ) => {
+      try {
+        const response = await fetch('/api/register',{
+            method : 'POST',
+            body : JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error registering user :", error);
+    }
+}

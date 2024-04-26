@@ -20,59 +20,16 @@ import { updateComplaints, fetchComplaints } from './ServerRequests.js';
 
 function FixComplaints() {
 
-    //TODO : 
-    // const response = fetchComplaints();
+    React.useEffect(() => {
+        const getComplaints = async () =>{
+            const response = await fetchComplaints();
+            setData(response);
+        }
+        getComplaints();
+    },[])
 
-    const response = { statusCode : 300,
-        complaints :  [
-            {
-                "complaintId": "121",
-                "complaintTitle": "Wifi Connection Not Working",
-                "complaintStatus": "Reported",
-                "raisedTime": "2024-12-08 00:08:00",
-                "complaintDescription": "Wifi Connection Not working after fee payment",
-                "expectedDateToSolve": "2024-12-09 03:04:00",
-                "commentFromOwner": "Please wait while we check on this",
-                "raisedByName" : "ABC",
-                "raisedByEmail" : "abc@gmail.com"
-            },
-            {
-                "complaintId": "122",
-                "complaintTitle": "Leaky Faucet in Bathroom",
-                "complaintStatus": "In Progress",
-                "raisedTime": "2024-12-07 11:15:00",
-                "complaintDescription": "The faucet in the main bathroom is leaking and causing water wastage.",
-                "expectedDateToSolve": "2024-12-10 12:00:00",
-                "commentFromOwner": "A plumber has been scheduled for the visit.",
-                "raisedByName" : "ABC",
-                "raisedByEmail" : "abc@gmail.com"
-            },
-            {
-                "complaintId": "123",
-                "complaintTitle": "Broken Window Lock",
-                "complaintStatus": "Resolved",
-                "raisedTime": "2024-12-05 16:42:00",
-                "complaintDescription": "The lock on the window in the living room is broken and won’t close properly.",
-                "expectedDateToSolve": "2024-12-06 18:00:00",
-                "commentFromOwner": "The lock has been replaced successfully.",
-                "raisedByName" : "ABC",
-                "raisedByEmail" : "abc@gmail.com"
-            },
-            {
-                "complaintId": "125",
-                "complaintTitle": "Pest Control Required",
-                "complaintStatus": "Reported",
-                "raisedTime": "2024-12-07 19:35:00",
-                "complaintDescription": "Signs of pest infestation in the kitchen need urgent pest control.",
-                "expectedDateToSolve": "2024-12-14 17:30:00",
-                "commentFromOwner": "Pest control service has been informed and will visit soon.",
-                "raisedByName" : "ABC",
-                "raisedByEmail" : "abc@gmail.com"
-            }
-        ]
-    }
 
-    const [data, setData] = React.useState(response.complaints);
+    const [data, setData] = React.useState(null);
 
 
 
@@ -86,7 +43,7 @@ function FixComplaints() {
         setSelectedComplaint(complaint);
         setOpenDialog(true);
         setComment(complaint.commentFromOwner);
-        setStatus(complaint.complaintStatus);
+        setStatus(complaint.status);
         setEstimatedDate(complaint.estimatedDate || '');
     };
 
@@ -106,14 +63,14 @@ function FixComplaints() {
         setEstimatedDate(event.target.value);
     };
 
-    const handleSaveChanges = () => {
+    const handleSaveChanges = async () => {
         // Update comment, status, and estimated date for the selected complaint
         const updatedComplaints = data.map(complaint => {
-            if (complaint.complaintId === selectedComplaint.complaintId) {
+            if (complaint._id === selectedComplaint._id) {
                 return {
                     ...complaint,
                     "commentFromOwner" : comment,
-                    "complaintStatus" : status,
+                    "status" : status,
                     "expectedDateToSolve" : estimatedDate
                 };
             }
@@ -122,18 +79,14 @@ function FixComplaints() {
 
         const payload = {
             expectedDateToSolve: estimatedDate,
-            complaintStatus: status,
+            status: status,
             commentFromOwner: comment
-        }; 
-        // TODO:       
-        // const response = updateComplaints( selectedComplaint.complaintId, payload );
-        // if ( response.status !== 200){
-        //     alert('There was an error updating the complaint status. Please try again later.');
-        //     return;
-        // }
-        // else{
-        //     alert('Updated the complaint status successfully.');
-        // }
+        };  
+        console.log(payload);
+        console.log(selectedComplaint._id);    
+        const response = await updateComplaints( selectedComplaint._id, payload );
+
+        alert("Updated the complaint successfully ");
 
         setData(updatedComplaints);
         handleCloseDialog();
@@ -146,7 +99,7 @@ function FixComplaints() {
                 <h2>Fix Complaints</h2>
                 <div>
                     <h3>Open Complaints : </h3>
-                    { data.filter(complaint => complaint.complaintStatus !== 'Resolved').map((complaint, index) => (
+                    { data!=null && data.filter(complaint => complaint.status !== 'Resolved').map((complaint, index) => (
                         <Accordion key={index}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -158,7 +111,7 @@ function FixComplaints() {
                             <AccordionDetails>
                                 <div>
                                     <p>Description: {complaint.complaintDescription}</p>
-                                    <p>Status: {complaint.complaintStatus}</p>
+                                    <p>Status: {complaint.status}</p>
                                     <p>Issue Raised: {complaint.raisedTime}</p>
                                     <p> Raised By : { complaint.raisedByName } {complaint.raisedByEmail}</p>
                                     <Button onClick={() => handleOpenDialog(complaint)}>Edit</Button>
@@ -169,7 +122,7 @@ function FixComplaints() {
                 </div>
                 <div>
                     <h3>Closed Complaints : </h3>
-                    {data.filter(complaint => complaint.complaintStatus === 'Resolved').map((complaint, index) => (
+                    {data!=null && data.filter(complaint => complaint.status === 'Resolved').map((complaint, index) => (
                         <Accordion key={index}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -181,7 +134,7 @@ function FixComplaints() {
                             <AccordionDetails>
                                 <div>
                                     <p>Description: {complaint.complaintDescription}</p>
-                                    <p>Status: {complaint.complaintStatus}</p>
+                                    <p>Status: {complaint.status}</p>
                                     <p>Issue Raised: {complaint.raisedTime}</p>
                                     <p>Issue Solved: {complaint.expectedDateToSolve}</p>
                                     <p>Comment: {complaint.commentFromOwner}</p>
@@ -212,7 +165,7 @@ function FixComplaints() {
                                 value={status}
                                 onChange={handleStatusChange}
                             >
-                                <MenuItem value="Reported">Reported</MenuItem>
+                                <MenuItem value="Received">Recieved</MenuItem>
                                 <MenuItem value="In Progress">In Progress</MenuItem>
                                 <MenuItem value="Resolved">Resolved</MenuItem>
                             </Select>
