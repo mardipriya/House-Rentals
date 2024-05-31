@@ -6,51 +6,24 @@ import Carousel from './Carousel';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody,  Select, MenuItem} from '@mui/material';
 
+import { getAllStatuses, updateStatus} from './ServerRequests';
 
 function UpdateStatus(){
     const columns = [
-        "Apartment Number", "Flat Number", "Current Status", "Applied By"
-    ]
-    const data = [
-        {
-            "Apartment Number" : 4030, 
-            "Flat Number" : 112,
-            "Current Status" : "Approved",
-            "Applied By" : "User 1"
-        },
-        {
-            "Apartment Number" : 4030, 
-            "Flat Number" : 212,
-            "Current Status" : "Partially Approved",
-            "Applied By" : "User 2"
-        },
-        {
-            "Apartment Number" : 4030, 
-            "Flat Number" : 312,
-            "Current Status" : "Approved",
-            "Applied By" : "User 3"
-        },
-        {
-            "Apartment Number" : 4030, 
-            "Flat Number" : 102,
-            "Current Status" : "Verified",
-            "Applied By" : "User 4"
-        },{
-            "Apartment Number" : 4040, 
-            "Flat Number" : 112,
-            "Current Status" : "Rejected",
-            "Applied By" : "User 5"
-        },
+        "apartmentNumber", "flatNumber", "status", "appliedBy"
     ]
 
-    const [updatedData, setUpdatedData] = React.useState(data);
-    React. useEffect(() => {
-        // This will execute whenever updatedData changes
-        console.log("Updated data:", updatedData);
-      }, [updatedData]); 
+    const [updatedData, setUpdatedData] = React.useState([]);
 
-      const [openDialog, setOpenDialog] = React.useState(false);
-      const [selectedUser, setSelectedUser] = React.useState(null);
+    React.useEffect(() => {
+        const userId = localStorage.getItem('userId'); 
+        getAllStatuses(userId).then(data => {
+            setUpdatedData(data);
+        }).catch(error => console.error('Failed to fetch payments:', error));
+    }, []);
+
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [selectedUser, setSelectedUser] = React.useState(null);
       
       const handleClickUser = (user) => {
           setSelectedUser(user);
@@ -62,9 +35,18 @@ function UpdateStatus(){
       };
 
     const handleChangeStatus = (event, index) => {
+
         const updatedStatus = event.target.value;
         const newData = [...updatedData]; // Create a copy of updatedData
-        newData[index] = { ...newData[index], "Current Status": updatedStatus }; // Update the status of the specific row
+        
+        const flatNumber = updatedData[index].flatNumber;
+        const apartmentNumber = updatedData[index].apartmentNumber;
+
+        updateStatus(flatNumber, apartmentNumber, updatedStatus).then(data => {
+            alert("Status updated successfully");
+        }).catch(error => console.error('Failed to fetch payments:', error));
+
+        newData[index] = { ...newData[index], "status": updatedStatus }; // Update the status of the specific row
         setUpdatedData(newData); // Update the state
       };
 
@@ -87,19 +69,19 @@ function UpdateStatus(){
                         <TableRow key={index}>
                         {columns.map((column, columnIndex) => (
                             <TableCell sx={{fontWeight: "bold"}} key={columnIndex}>
-                            {column === "Current Status" ? (
+                            {column === "status" ? (
                               <Select
                                 value={row[column]}
                                 onChange={(event) => handleChangeStatus(event, index)}
                               >
-                                <MenuItem value="Applied">Applied</MenuItem>
-                                <MenuItem value="Under Review">Under Review</MenuItem>
-                                <MenuItem value="Partially Approved">Partially Approved</MenuItem>
-                                <MenuItem value="Verified">Verified</MenuItem>
-                                <MenuItem value="Approved">Approved</MenuItem>
-                                <MenuItem value="Rejected">Declined</MenuItem>
+                                <MenuItem value="applied">Applied</MenuItem>
+                                <MenuItem value="underReview">Under Review</MenuItem>
+                                <MenuItem value="partiallyApproved">Partially Approved</MenuItem>
+                                <MenuItem value="verified">Verified</MenuItem>
+                                <MenuItem value="approved">Approved</MenuItem>
+                                <MenuItem value="rejected">Declined</MenuItem>
                               </Select>
-                            ) : ( column === "Applied By" ? <a onClick={() => handleClickUser(row["Applied By"])} href="#"> {row[column]} </a>: row[column])}
+                            ) : ( column === "appliedBy" ? <a onClick={() => handleClickUser(row["appliedBy"])} href="#"> {row[column]} </a>: row[column])}
                           </TableCell>
                         ))}
                         </TableRow>

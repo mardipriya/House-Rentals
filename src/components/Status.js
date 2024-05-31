@@ -1,14 +1,24 @@
 import Sidebar from './Sidebar';
 import {Paper, Button } from '@mui/material'
 import LinearProgress from '@mui/joy/LinearProgress';
+import  React  from 'react';
 
-import data from './../components-data/StatusData'
+import { getStatus } from './ServerRequests';
 
 function Status(){
 
     const handleApply = function(){
         window.location.href = '/home'
     }
+
+    const [data, setData] = React.useState('');
+
+    React.useEffect(() => {
+        const userId = localStorage.getItem('userId'); 
+        getStatus(userId).then(data => {
+            setData(data);
+        }).catch(error => console.error('Failed to fetch status :', error));
+    }, []);
 
     return (
         <div className="dflex ai-stretch">
@@ -24,7 +34,7 @@ function Status(){
                         //Conditional Rendering
                         <div>
                             <div className="dflex jc-around w100">
-                                <img src={data.thumbnail} width="400px" height="300px"></img>
+                                <img src="https://atlas-content-cdn.pixelsquid.com/assets_v2/158/1581395264726373462/jpeg-600/G03.jpg" width="400px" height="300px"></img>
                             </div>
                             <h4> Status : {data.status} </h4>
                             <LinearProgress
@@ -43,10 +53,10 @@ function Status(){
                             }
 
                             <h4> Application Details : </h4>
-                            <p> Apartment Number : {data.apartmentNumber} </p>
-                            <p> Flat Number : { data.flatNumber } </p>
-                            <p> Owner Name : { data.ownerName} </p>
-                            <p> Owner Contact : {data.ownerContact}</p>
+                            <p> Apartment Number : {data.apartmentDetails.apartmentNumber} </p>
+                            <p> Flat Number : { data.apartmentDetails.flatNumber } </p>
+                            <p> Owner Name : { data.apartmentDetails.ownerName} </p>
+                            <p> Owner Contact : {data.apartmentDetails.ownerContact}</p>
                             {/* <div className="dflex">
                                 <Button variant="outlined" > View Apartment Details </Button>
                             </div> */}

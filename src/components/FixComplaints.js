@@ -99,6 +99,9 @@ function FixComplaints() {
                 <h2>Fix Complaints</h2>
                 <div>
                     <h3>Open Complaints : </h3>
+                    { data!=null && data.filter(complaint => complaint.status !== 'Resolved').length == 0 && 
+                      <h4> There are No Open Complaints Right now.</h4>
+                    }
                     { data!=null && data.filter(complaint => complaint.status !== 'Resolved').map((complaint, index) => (
                         <Accordion key={index}>
                             <AccordionSummary
@@ -122,6 +125,9 @@ function FixComplaints() {
                 </div>
                 <div>
                     <h3>Closed Complaints : </h3>
+                    {data!=null && data.filter(complaint => complaint.status === 'Resolved').length == 0 && 
+                    <h4> There are no Closed Complaints Right now.</h4>
+                    }
                     {data!=null && data.filter(complaint => complaint.status === 'Resolved').map((complaint, index) => (
                         <Accordion key={index}>
                             <AccordionSummary

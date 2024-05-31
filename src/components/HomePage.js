@@ -36,7 +36,7 @@ const filterBoxStyle = {
     }, []);
 
     React.useEffect(() => {
-        console.log("Data Updated : "+[data]);
+        console.log("Data Updated : ",data);
     }, [data]);
 
     const [filterDate, setFilterDate] = React.useState(null)

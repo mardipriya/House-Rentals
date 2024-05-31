@@ -198,6 +198,7 @@ export const submitLeaseApplication = async ( id, payload ) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            body : JSON.stringify(payload)
         });
         return await response.json();
     }
@@ -213,7 +214,7 @@ export const submitLeaseApplication = async ( id, payload ) => {
 export const getAllUserPayments = async ( id ) => {
     try {
 
-        const response = await fetch(`${baseUrl}/api/getAllRequiredPayments/6601dfe441c0a1a29a1984dc`, {
+        const response = await fetch(`${baseUrl}/api/getAllRequiredPayments/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -347,5 +348,87 @@ export const registerUser = async( payload ) => {
         return data;
     } catch (error) {
         console.error("Error registering user :", error);
+    }
+}
+
+export const getStatus = async (id)=>{
+    try{
+        const response = await fetch(`/api/getStatus/${id}`,{
+            method : 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
+    catch ( error ){
+        alert("Error getting status : ",error);
+    }
+}
+
+export const getAllStatuses = async ()=>{
+    try{
+        const response = await fetch('/api/getAllStatus',{
+            method : 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
+    catch ( error ){
+        alert("Error getting all statuses : ",error);
+    }
+}
+
+export const terminateLease = async (id) => {
+    try{
+        const response = await fetch(`/api/terminateLease/${id}`,{
+            method : 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
+    catch ( error ){
+        alert(error);
+    }
+}
+
+export const updateStatus = async ( flatNumber, aptNumber, status) =>{
+    try{
+        const response = await fetch(`/api/updateStatus/${flatNumber}/${aptNumber}`,{
+            method : 'PUT',
+            body : JSON.stringify( {status : status}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
+    catch ( error ){
+        alert(error);
+    }
+}
+
+export const updatePaymentStatus = async(id, bodyContent)=>{
+    try{
+        const response = await fetch(`/api/updatePayment/${id}`,{
+            method : 'PUT',
+            body : JSON.stringify( bodyContent ),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
+    catch ( error ){
+        alert(error);
     }
 }

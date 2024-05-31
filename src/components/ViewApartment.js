@@ -49,15 +49,19 @@ function ViewApartment(){
     };
 
     const submitLease = async (payload) =>{
+        console.log("Payload ", payload);
         const response = await submitLeaseApplication(userId, payload);
-        if( response.status == 200 ){
-            if( response.data ){
-                alert("Lease was successfully applied");
-            }
-        }
-        else{
-            alert(response.message)
-        }
+        console.log("Got response");
+        console.log(response);
+        alert(response.message);
+        // // if( response.status == 200 ){
+        // //     if( response.data ){
+        // //         alert("Lease was successfully applied");
+        // //     }
+        // // }
+        // else{
+        //     alert(response.message)
+        // }
     }
 
     return (
@@ -92,7 +96,10 @@ function ViewApartment(){
                                 const formJson = Object.fromEntries(formData.entries());
                                 console.log(formJson);
                                 try{
-                                    submitLease();
+                                    const payload = {
+                                        apartmentDetailsId : data._id,
+                                    }
+                                    submitLease( payload );
                                 }
                                 catch(error){
                                     alert("There was some error, please try after sometime");

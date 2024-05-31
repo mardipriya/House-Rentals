@@ -27,22 +27,40 @@ const searchBoxStyle = {
 
 function MainPage(){
 
-    const response = fetchAvailableApartments();
-    console.log(response);
+    const [dataCopy, setDataCopy] = React.useState([]);
 
-    const [data, setData] = React.useState(leaseOptions);
+    const [data, setData] = React.useState([]);
     React.useEffect(() => {
-        console.log("Data Updated : "+data);
+        async function fetchData() {
+            try {
+                const response = await fetchAvailableApartments();
+                console.log("Got the following response:");
+                console.log(response);
+                setData(response);
+                setDataCopy(response);
+                console.log("After setting data : ");
+                console.log(data);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
+        }
+
+        fetchData();
+
+    }, []);
+
+    React.useEffect(() => {
+        console.log("Data Updated : ",data);
     }, [data]);
 
     const [filterDate, setFilterDate] = React.useState(null)
     const [filterType, setFilterType] = React.useState(null)
 
     const updateFilter = (date, type)=>{
-        const filteredData = leaseOptions.filter(item => {
-            const itemDate = new Date(item['avail-from']).getTime();
+        const filteredData = dataCopy.filter(item => {
+            const itemDate = new Date(item.apartmentDetails['availableFrom']).getTime();
             const filterDateTime = new Date(date).getTime();
-            return itemDate >= filterDateTime && item['bedrooms'] === type;
+            return itemDate >= filterDateTime && item.apartmentDetails['bedrooms'] === type;
         });
         setData(filteredData);
         setFilterDate(date);
@@ -60,7 +78,7 @@ function MainPage(){
                 </div>
             </div>
             <FilterBox updateFilter={updateFilter} style={searchBoxStyle}/>
-                <LeaseOptions fromPage={"Main"} arr={data}/>
+                <LeaseOptions date={filterDate} type={filterType} fromPage={"Main"} arr={data}/>
             <Footer/>
         </div>
     )

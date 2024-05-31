@@ -2,6 +2,8 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import { Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
 
+import {updatePaymentStatus} from './ServerRequests';
+
 function AdminPayments() {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [selectedPayment, setSelectedPayment] = React.useState(null);
@@ -9,26 +11,44 @@ function AdminPayments() {
     const [paymentStatus, setPaymentStatus] = React.useState('');
     const [filterUser, setFilterUser] = React.useState('');
 
-    // Sample payments data, replace this with your actual data
-    const payments = [
-        {
-            id: 1,
-            description: "Advance",
-            amount: 1000,
-            status: "Paid",
-            transactionDetails: "TX00232N12",
-            user: "User 1"
-        },
-        {
-            id: 2,
-            description: "Cleaning Fee",
-            amount: 120,
-            status: "Paid",
-            transactionDetails: "TX20232N12",
-            user: "User 2"
-        },
-        // Add more payment objects as needed
-    ];
+    const [allUsers, setAllUsers] = React.useState([]);
+
+    const [ member, setMember] = React.useState('');
+
+    const [ payments, setPayments ] = React.useState([]); 
+
+    React.useEffect(() => {
+        
+        const fetchPayments = async (userId) => {
+            try {
+                const response = await fetch(`api/getAllRequiredPayments/`);
+                const data = await response.json();
+                setPayments(data.payments);
+                console.log(data.payments);
+                console.log(payments);
+                if (response.status === 404 || response.status == 500) {
+                    alert(response.error);
+                }
+            } catch (error) {
+                console.error('Failed to fetch lease details:', error);
+            }
+        };
+
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('/api/getAllUsers');
+                const users = await response.json();
+                setAllUsers(users);
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+                alert('Failed to load user data');
+            }
+        };
+        fetchUsers();
+        fetchPayments();
+    }, []);
+
+    
 
     // Extract unique user names
     const users = Array.from(new Set(payments.map(payment => payment.user)));
@@ -53,8 +73,14 @@ function AdminPayments() {
     };
 
     const handleSaveTransactionDetails = () => {
-        // Here you would save the transaction details and status to the backend
-        // For demonstration purposes, let's just log them
+        const data = {
+            transactionId : transactionDetails,
+            status : paymentStatus
+        }
+        updatePaymentStatus(selectedPayment._id, data ).then(data => {
+            setPayments(data.payments);
+        }).catch(error => console.error('Failed to fetch payments:', error));
+
         console.log("Updated transaction details:", transactionDetails);
         console.log("Updated payment status:", paymentStatus);
         handleCloseDialog();
@@ -64,24 +90,16 @@ function AdminPayments() {
         setFilterUser(event.target.value);
     };
 
+    const handleChange = ()=>{
+
+    }
+
     return (
         <div className="dflex ai-stretch">
             <Sidebar userName="Admin" />
             <div className="dflex jc-around" style={styles.mainContent}>
                 <Paper elevation={5} sx={{ width: "80%", padding: "32px" }}>
                     <h2>Admin Payments</h2>
-                    <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                        <InputLabel>User</InputLabel>
-                        <Select
-                            value={filterUser}
-                            onChange={handleUserFilterChange}
-                        >
-                            <MenuItem value="">All Users</MenuItem>
-                            {users.map((user, index) => (
-                                <MenuItem key={index} value={user}>{user}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
                     <TableContainer>
                         <Table>
                             <TableHead>
@@ -91,7 +109,7 @@ function AdminPayments() {
                                     <TableCell align="right">Status</TableCell>
                                     <TableCell align="right">Transaction Details</TableCell>
                                     <TableCell align="right">User</TableCell>
-                                    {/* <TableCell align="right">Actions</TableCell> */}
+                                    <TableCell align="right">Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -100,11 +118,11 @@ function AdminPayments() {
                                         <TableCell>{payment.description}</TableCell>
                                         <TableCell align="right">${payment.amount}</TableCell>
                                         <TableCell align="right">{payment.status}</TableCell>
-                                        <TableCell align="right">{payment.transactionDetails}</TableCell>
-                                        <TableCell align="right">{payment.user}</TableCell>
-                                        {/* <TableCell align="right">
+                                        <TableCell align="right">{payment.transactionId}</TableCell>
+                                        <TableCell align="right">{payment.user.email}</TableCell>
+                                        <TableCell align="right">
                                             <Button onClick={() => handleOpenDialog(payment)}>Update</Button>
-                                        </TableCell> */}
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

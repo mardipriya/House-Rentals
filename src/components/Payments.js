@@ -46,9 +46,19 @@ function Payments() {
     const handlePay = () => {
         // Here you would make the payment and update the transaction details
         const randomTransaction = Math.floor(1000 + Math.random() * 9000); // Generate a random transaction ID
-        const updatedPayments = { ...payments };
-        updatedPayments[paymentType][2] = `TX${randomTransaction}`;
-        alert(`Payment for ${paymentType} has been made successfully. Transaction ID: TX${randomTransaction}`);
+        var updatedPayments = [ ...payments ];
+        console.log(paymentType)
+        for( var i = 0 ; i< payments.length ; i++){
+            console.log(updatedPayments[i]._id +" "+paymentType);
+            if (payments[i]._id === paymentType) {
+                console.log('Found payment');
+                console.log(updatedPayments[i]);
+                updatedPayments[i].transactionId = `TX${randomTransaction}`;
+                updatedPayments[i].status = "Paid";
+                setPayments(updatedPayments); // Update the payments state with the new transactionId
+                alert(`Payment for ${paymentType} has been made successfully. Transaction ID: TX${randomTransaction}`);
+            } 
+        }
         setOpen(false);
     };
 
@@ -83,7 +93,7 @@ function Payments() {
                                                     <TableCell component="th" scope="row">{payment.description}</TableCell>
                                                     <TableCell align="right">${payment.amount}</TableCell>
                                                     <TableCell sx={{ color: payment.status === "Paid" ? "green" : "red", fontWeight: "bold" }} align="right">
-                                                        {payment.status === "Paid" ? payment.status : <a href="#" onClick={() => handleClickOpen(payment.description)}>Pay Now</a>}
+                                                        {payment.status === "Paid" ? payment.status : <a href="#" onClick={() => handleClickOpen(payment._id)}>Pay Now</a>}
                                                     </TableCell>
                                                     <TableCell align="right">{payment.transactionId.toUpperCase()}</TableCell>
                                                 </TableRow>

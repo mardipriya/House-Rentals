@@ -33,7 +33,7 @@ function LeaseOptions(props) {
     const handleOpenDialog = (index, mode) => {
         setDialogMode(mode);
         console.log(apartments)
-        setCurrentApartment({});
+        setCurrentApartment(apartments[index]);
         setOpenDialog(true);
     };
 
@@ -71,7 +71,7 @@ function LeaseOptions(props) {
     const handleSave = async (apartmentData) => {
         try {
             const response = dialogMode === 'add' ? await createApartment(apartmentData) : await updateApartment(currentApartment._id, apartmentData);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setApartments(dialogMode === 'add' ? [response.apartment, ...apartments] : apartments.map(apartment => apartment.apartmentDetails._id === currentApartment._id ? response.apartment : apartment));
                 handleCloseDialog();
             } else {
@@ -94,7 +94,7 @@ function LeaseOptions(props) {
                 </div>
             )}
             <div className="dflex jc-around ai-center fwrap">
-                {apartments.map((object, i) => (
+                {apartments!=null && apartments.map((object, i) => (
                     <Paper key={i} elevation={5} sx={{ position: 'relative', display: "flex", flexDirection: "column", textAlign: 'left', margin: '32px', padding: "48px" }}>
                         {fromPage === "Admin" && isAdmin && (
                             <>
@@ -105,11 +105,11 @@ function LeaseOptions(props) {
                         <div className="w100 dflex jc-around">
                             <img src={require('./../images/' + 'sample-1.avif')} width="160px" height="160px" alt="Apartment"></img>
                         </div>
-                        <p>Apartment Number: {object.apartmentDetails['apartmentNumber']}</p>
-                        <p>Flat Number: {object.apartmentDetails['flatNumber']}</p>
-                        <p>Bedrooms: {object.apartmentDetails['bedrooms']}</p>
-                        <p>Available From: {new Date(object.apartmentDetails['availableFrom']).toLocaleDateString()}</p>
-                        <Button style={{ marginBottom: "10px" }} variant="outlined" onClick={() => handleApply(object.apartmentDetails["_id"])}>Apply Now!</Button>
+                        <p>Apartment Number: {apartments[i]['apartmentNumber']}</p>
+                        <p>Flat Number: {apartments[i]['flatNumber']}</p>
+                        <p>Bedrooms: {apartments[i]['bedrooms']}</p>
+                        <p>Available From: {new Date(apartments[i]['availableFrom']).toLocaleDateString()}</p>
+                        <Button style={{ marginBottom: "10px" }} variant="outlined" onClick={() => handleApply(apartments[i]["_id"])}>Apply Now!</Button>
                         <Button variant="outlined"><a href={"mailto:admin@gmail.com?subject=Apartment%20Enquiry&body=Hi%20Team%20I%20want%20to%20know%20about%20Apartment%20" + object['apt-number'] + "%20" + object['flat-number']}>Contact Us</a></Button>
                     </Paper>
                 ))}
@@ -133,7 +133,8 @@ function ApartmentDialog({ open, onClose, onSave, apartment, mode }) {
         'ownerName': '',
         'ownerContact': '',
         'amenities': '',
-        'images': ''
+        'images': '',
+        'availableFrom' : ''
     });
 
     // Update form data when apartment data changes
@@ -146,6 +147,7 @@ function ApartmentDialog({ open, onClose, onSave, apartment, mode }) {
                 'bathrooms': apartment['bathrooms'] || '',
                 'description': apartment['description'] || '',
                 'address': '',
+                'availableFrom' : apartment['availableFrom'],
                 'ownerName': apartment['ownerName'] || '',
                 'ownerContact': apartment['ownerContact'] || '',
                 'amenities': apartment['amenities'] ? apartment['amenities'].join(', ') : '', // Assuming amenities is an array
@@ -160,6 +162,7 @@ function ApartmentDialog({ open, onClose, onSave, apartment, mode }) {
                 'bathrooms': '',
                 'description': '',
                 'address': '',
+                'availableFrom' : '',
                 'ownerName': '',
                 'ownerContact': '',
                 'amenities': '',
