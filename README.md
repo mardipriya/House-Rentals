@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+# Lease Management Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The Lease Management Application is a comprehensive solution designed to streamline and manage lease-related activities. This application allows users to apply for apartments, manage lease payments, and track transaction details. Built with a React frontend and Node.js backend, it provides a user-friendly interface and robust backend services.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- User authentication and authorization
+- Apartment application management
+- Apply Lease
+- Different User Roles
+- Find and Track Status of Application
+- Users can view infomration about their lease
+- Users can raise complaints
+- Lease payment management
+- Transaction tracking and history
+- Secure payment processing
+- User-friendly interface
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend:**
+  - React
+  - Material-UI
 
-### `npm test`
+- **Backend:**
+  - Node.js
+  - Express
+  - MongoDB
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Ensure you have the following installed:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js (v14 or later)
+- MongoDB
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
 
-### `npm run eject`
+1. **Clone the repositories:**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    ```bash
+    git clone https://github.com/Hrithik/house-rentals.git
+    cd lease-management
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Install dependencies:**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    For the backend:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    ```bash
+    npm install
+    ```
 
-## Learn More
+    For the frontend:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    ```bash
+    npm install
+    ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **Configure environment variables:**
 
-### Code Splitting
+    Create a `.env` file in the `backend` directory and add the following:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    ```env
+    PORT=3001
+    MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret
+    ```
 
-### Analyzing the Bundle Size
+### Running the Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Start the backend server:**
 
-### Making a Progressive Web App
+    ```bash
+    cd backend
+    npm start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    The backend server should now be running on `http://localhost:3001`.
 
-### Advanced Configuration
+2. **Start the frontend development server:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    ```bash
+    cd ../frontend
+    npm start
+    ```
 
-### Deployment
+    The frontend development server should now be running on `http://localhost:3000`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## API Endpoints
 
-### `npm run build` fails to minify
+### User Authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- `POST /api/users/register` - Register a new user
+- `POST /api/users/login` - User login
+
+### Payments
+
+- `GET /api/payments/:userId` - Get all payments for a user
+- `PUT /api/updatePayment/:id` - Update payment status and transaction ID
+
+### Example
+
+To update a payment:
+
+```http
+PUT /api/updatePayment/:id
+Content-Type: application/json
+
+{
+  "status": "Paid",
+  "transactionId": "TX1234"
+}
+```
+
+## Folder Structure
+
+Backend is available at https://github.com/srinivastherapati/LeaseManagement]
+
