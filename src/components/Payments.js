@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Sidebar from './Sidebar';
-import { Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material'
+import { Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,8 +15,9 @@ function Payments() {
     const [payments, setPayments] = React.useState(null);
     const [open, setOpen] = React.useState(false);
     const [paymentType, setPaymentType] = React.useState('');
-    const [accountNumber, setAccountNumber] = React.useState('');
-    const [routingNumber, setRoutingNumber] = React.useState('');
+    const [cardNumber, setCardNumber] = React.useState('');
+    const [expiryDate, setExpiryDate] = React.useState('');
+    const [cvv, setCvv] = React.useState('');
 
     React.useEffect(() => {
         const userId = localStorage.getItem('userId'); 
@@ -36,29 +37,44 @@ function Payments() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        if (name === 'accountNumber') {
-            setAccountNumber(value);
-        } else if (name === 'routingNumber') {
-            setRoutingNumber(value);
+        if (name === 'cardNumber') {
+            setCardNumber(value);
+        } else if (name === 'expiryDate') {
+            setExpiryDate(value);
+        } else if (name === 'cvv') {
+            setCvv(value);
+        }
+    };
+
+    const updatePayment = async (paymentType, transactionId) => {
+        try {
+            const response = await fetch(`/api/updatePayment/${paymentType}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'Paid',
+                    transactionId: transactionId
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setPayments(data.payments);
+                alert(`Payment has been made successfully. Transaction ID: ${transactionId}`);
+            } else {
+                alert(`Failed to update payment: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Failed to update payment:', error);
+            alert('An error occurred while processing the payment.');
         }
     };
 
     const handlePay = () => {
-        // Here you would make the payment and update the transaction details
         const randomTransaction = Math.floor(1000 + Math.random() * 9000); // Generate a random transaction ID
-        var updatedPayments = [ ...payments ];
-        console.log(paymentType)
-        for( var i = 0 ; i< payments.length ; i++){
-            console.log(updatedPayments[i]._id +" "+paymentType);
-            if (payments[i]._id === paymentType) {
-                console.log('Found payment');
-                console.log(updatedPayments[i]);
-                updatedPayments[i].transactionId = `TX${randomTransaction}`;
-                updatedPayments[i].status = "Paid";
-                setPayments(updatedPayments); // Update the payments state with the new transactionId
-                alert(`Payment for ${paymentType} has been made successfully. Transaction ID: TX${randomTransaction}`);
-            } 
-        }
+        const transactionId = `TX${randomTransaction}`;
+        updatePayment(paymentType, transactionId);
         setOpen(false);
     };
 
@@ -83,19 +99,24 @@ function Payments() {
                                             <TableCell sx={{ fontWeight: "bold" }} align="right">Amount</TableCell>
                                             <TableCell sx={{ fontWeight: "bold" }} align="right">Status</TableCell>
                                             <TableCell sx={{ fontWeight: "bold" }} align="right">Transaction Details</TableCell>
+                                            <TableCell sx={{ fontWeight: "bold" }} align="right">Pay Now</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {/* Render advance payment */}
                                         {payments && Object.entries(payments).map(([key, payment]) => {
                                             return (
                                                 <TableRow key={key}>
                                                     <TableCell component="th" scope="row">{payment.description}</TableCell>
                                                     <TableCell align="right">${payment.amount}</TableCell>
                                                     <TableCell sx={{ color: payment.status === "Paid" ? "green" : "red", fontWeight: "bold" }} align="right">
-                                                        {payment.status === "Paid" ? payment.status : <a href="#" onClick={() => handleClickOpen(payment._id)}>Pay Now</a>}
+                                                        {payment.status}
                                                     </TableCell>
                                                     <TableCell align="right">{payment.transactionId.toUpperCase()}</TableCell>
+                                                    <TableCell align="right">
+                                                        {payment.status !== "Paid" &&
+                                                            <Button onClick={() => handleClickOpen(payment._id)}>Pay Now</Button>
+                                                        }
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -108,18 +129,27 @@ function Payments() {
                                     <TextField
                                         autoFocus
                                         margin="dense"
-                                        id="accountNumber"
-                                        name="accountNumber"
-                                        label="Bank Account Number"
+                                        id="cardNumber"
+                                        name="cardNumber"
+                                        label="Card Number"
                                         type="text"
                                         fullWidth
                                         onChange={handleInputChange}
                                     />
                                     <TextField
                                         margin="dense"
-                                        id="routingNumber"
-                                        name="routingNumber"
-                                        label="Routing Number"
+                                        id="expiryDate"
+                                        name="expiryDate"
+                                        label="Expiry Date (MM/YY)"
+                                        type="text"
+                                        fullWidth
+                                        onChange={handleInputChange}
+                                    />
+                                    <TextField
+                                        margin="dense"
+                                        id="cvv"
+                                        name="cvv"
+                                        label="CVV"
                                         type="text"
                                         fullWidth
                                         onChange={handleInputChange}
@@ -127,7 +157,7 @@ function Payments() {
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleClose}>Cancel</Button>
-                                    <Button onClick={handlePay} disabled={!accountNumber || !routingNumber} color="primary">Pay</Button>
+                                    <Button onClick={handlePay} disabled={!cardNumber || !expiryDate || !cvv} color="primary">Pay</Button>
                                 </DialogActions>
                             </Dialog>
                         </div>
@@ -135,7 +165,7 @@ function Payments() {
                 </Paper>
             </div>
         </div>
-    )
+    );
 }
 
 const styles = {

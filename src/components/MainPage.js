@@ -58,9 +58,9 @@ function MainPage(){
 
     const updateFilter = (date, type)=>{
         const filteredData = dataCopy.filter(item => {
-            const itemDate = new Date(item.apartmentDetails['availableFrom']).getTime();
+            const itemDate = new Date(item['availableFrom']).getTime();
             const filterDateTime = new Date(date).getTime();
-            return itemDate >= filterDateTime && item.apartmentDetails['bedrooms'] === type;
+            return itemDate >= filterDateTime && item['bedrooms'] === type;
         });
         setData(filteredData);
         setFilterDate(date);

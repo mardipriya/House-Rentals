@@ -25,8 +25,16 @@ function UpdateStatus(){
     const [openDialog, setOpenDialog] = React.useState(false);
     const [selectedUser, setSelectedUser] = React.useState(null);
       
-      const handleClickUser = (user) => {
-          setSelectedUser(user);
+      const handleClickUser = (index) => {
+
+        const record = {
+            name : updatedData[index].userName,
+            email : updatedData[index].email,
+            phone : updatedData[index].phoneNumber,
+            income : updatedData[index].income
+        }
+
+          setSelectedUser(record);
           setOpenDialog(true);
       };
       
@@ -81,7 +89,7 @@ function UpdateStatus(){
                                 <MenuItem value="approved">Approved</MenuItem>
                                 <MenuItem value="rejected">Declined</MenuItem>
                               </Select>
-                            ) : ( column === "appliedBy" ? <a onClick={() => handleClickUser(row["appliedBy"])} href="#"> {row[column]} </a>: row[column])}
+                            ) : ( column === "appliedBy" ? <a onClick={() => handleClickUser(index)} href="#"> {row["userName"]} </a>: row[column])}
                           </TableCell>
                         ))}
                         </TableRow>
@@ -92,7 +100,10 @@ function UpdateStatus(){
                         <DialogContent>
                             {selectedUser && (
                                 <div>
-                                    <p><strong>User Name:</strong> {selectedUser}</p>
+                                    <p><strong>User Name:</strong> {selectedUser.name}</p>
+                                    <p><strong>User Email:</strong> { selectedUser.email}</p>
+                                    <p><strong>User Phone:</strong> {selectedUser.phone}</p>
+                                    <p><strong>User Income:</strong> {selectedUser.income}</p>
                                     {/* Add more user details here if needed */}
                                 </div>
                             )}
