@@ -2,21 +2,26 @@
 
 ## Overview
 
-The Lease Management Application is a comprehensive solution designed to streamline and manage lease-related activities. This application allows users to apply for apartments, manage lease payments, and track transaction details. Built with a React frontend and Node.js backend, it provides a user-friendly interface and robust backend services.
+The Lease Management Application streamlines lease operations with a React frontend and Node.js backend. It offers comprehensive features for users to apply, manage payments, and track transactions securely. Administrators can efficiently oversee complaints, update statuses, and maintain housing options, ensuring a seamless leasing experience.
 
 ## Features
 
-- User authentication and authorization
-- Apartment application management
-- Apply Lease
-- Different User Roles
-- Find and Track Status of Application
-- Users can view infomration about their lease
-- Users can raise complaints
-- Lease payment management
-- Transaction tracking and history
-- Secure payment processing
-- User-friendly interface
+- **User Authentication and Authorization**: Secure login and role-based access control.
+- **Apartment Application Management**: Facilitates the application process for apartments.
+- **Apply for Lease**: Enables users to apply for lease agreements.
+- **Different User Roles**: Supports various user roles with distinct permissions.
+- **Find and Track Application Status**: Allows users to locate and monitor the status of their applications.
+- **View Lease Information**: Provides users with access to information about their leases.
+- **Raise Complaints**: Users can submit complaints regarding their lease or living conditions.
+- **Lease Payment Management**: Helps users manage their lease payments efficiently.
+- **Admin Complaint Management**: Admins can oversee and address user complaints.
+- **Update Lease Status**: Admins have the authority to modify the status of leases.
+- **Terminate Lease**: Admins can initiate the termination of lease agreements.
+- **Add and Edit Housing Options**: Admins can add new housing options and modify existing ones.
+- **Filter Houses**: Allows users to filter available housing options based on criteria such as the number of bedrooms and available date.
+- **Transaction Tracking and History**: Tracks and maintains a history of all lease-related transactions.
+- **Secure Payment Processing**: Ensures secure processing of lease payments.
+- **User-Friendly Interface**: Offers an intuitive interface for easy navigation and usage.
 
 ## Technologies Used
 
@@ -117,7 +122,8 @@ Content-Type: application/json
 }
 ```
 
-## Folder Structure
-
 Backend is available at https://github.com/srinivastherapati/LeaseManagement]
+
+## Contact
+For any questions or suggestions, please contact
 
