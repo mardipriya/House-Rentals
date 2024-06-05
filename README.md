@@ -122,8 +122,51 @@ Content-Type: application/json
 }
 ```
 
-Backend is available at https://github.com/srinivastherapati/LeaseManagement]
+Backend is available at https://github.com/srinivastherapati/LeaseManagement
+
+
+## Screenshots
+
+<div align="center">
+    <img src="public/screenshots/1.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/2.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/3.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/4.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/5.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/6.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/7.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/8.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/9.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/10.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/11.jpeg" width="400px"</img> 
+</div>
+<div align="center">
+    <img src="public/screenshots/12.jpeg" width="400px"</img> 
+</div>
 
 ## Contact
 For any questions or suggestions, please contact
+Hrithik Manda,
+mandhahrithik@gmail.com
+LinkedIn : https://www.linkedin.com/in/hrithik-manda/
 
