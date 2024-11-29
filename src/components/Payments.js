@@ -65,11 +65,54 @@ function Payments() {
     }
   };
 
-  const handlePay = () => {
-    const randomTransaction = Math.floor(1000 + Math.random() * 9000); // Generate a random transaction ID
-    const transactionId = `TX${randomTransaction}`;
-    // Logic to update payment goes here
-    setOpen(false);
+  const handlePay = async () => {
+    if (!cardNumber || !expiryDate || !cvv) {
+      alert("Please enter all payment details.");
+      return;
+    }
+
+    try {
+      // Simulating payment processing
+      const response = await fetch(`/api/updatePayment/${paymentType}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bankNumber: cardNumber,
+          routerNumber: cvv,
+          amount: futurePayments.find((payment) => payment._id === paymentType)
+            ?.amount,
+          description: futurePayments.find(
+            (payment) => payment._id === paymentType
+          )?.description,
+          status: "Paid",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Payment Successful !");
+
+        window.location.reload();
+
+        // // Refresh future payments after successful payment
+        // const userId = localStorage.getItem("userId");
+        // const updatedPayments = await getFuturePayments(userId);
+        // setFuturePayments(updatedPayments.payments);
+
+        // // Close the dialog
+        // setOpen(false);
+      } else {
+        alert("Payment Failed: " + data.message);
+      }
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      alert(
+        "An error occurred while processing the payment. Please try again."
+      );
+    }
   };
 
   const renderTable = (payments, title) => (
@@ -89,7 +132,7 @@ function Payments() {
                   Status
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }} align="right">
-                  Transaction Details
+                  Due Date
                 </TableCell>
                 {title === "Future Payments" && (
                   <TableCell sx={{ fontWeight: "bold" }} align="right">
@@ -115,7 +158,7 @@ function Payments() {
                     {payment.status}
                   </TableCell>
                   <TableCell align="right">
-                    {payment.transactionId?.toUpperCase() || "N/A"}
+                    {new Date(payment.dueDate).toDateString()}
                   </TableCell>
                   {title === "Future Payments" && payment.status !== "Paid" && (
                     <TableCell align="right">
