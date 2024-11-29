@@ -131,9 +131,16 @@ function Payments() {
                 <TableCell sx={{ fontWeight: "bold" }} align="right">
                   Status
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="right">
-                  Due Date
-                </TableCell>
+                {title === "Past Payments" && (
+                  <TableCell sx={{ fontWeight: "bold" }} align="right">
+                    Paid Date
+                  </TableCell>
+                )}
+                {title === "Future Payments" && (
+                  <TableCell sx={{ fontWeight: "bold" }} align="right">
+                    Due Date
+                  </TableCell>
+                )}
                 {title === "Future Payments" && (
                   <TableCell sx={{ fontWeight: "bold" }} align="right">
                     Pay Now
@@ -157,9 +164,16 @@ function Payments() {
                   >
                     {payment.status}
                   </TableCell>
-                  <TableCell align="right">
-                    {new Date(payment.dueDate).toDateString()}
-                  </TableCell>
+                  {title === "Past Payments" && (
+                    <TableCell align="right">
+                      {new Date(payment.paidDate).toDateString()}
+                    </TableCell>
+                  )}
+                  {title === "Future Payments" && (
+                    <TableCell align="right">
+                      {new Date(payment.dueDate).toDateString()}
+                    </TableCell>
+                  )}
                   {title === "Future Payments" && payment.status !== "Paid" && (
                     <TableCell align="right">
                       <Button onClick={() => handleClickOpen(payment._id)}>
