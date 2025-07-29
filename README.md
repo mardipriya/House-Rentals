@@ -1,172 +1,270 @@
-# Lease Management Application
+# 🏠 House Rentals - Modern Rental Platform
 
-## Overview
+A comprehensive, modern house rental application built with React and Material-UI, featuring advanced search, user authentication, and a modular architecture.
 
-The Lease Management Application streamlines lease operations with a React frontend and Node.js backend. It offers comprehensive features for users to apply, manage payments, and track transactions securely. Administrators can efficiently oversee complaints, update statuses, and maintain housing options, ensuring a seamless leasing experience.
+## ✨ Features
 
-## Features
+### 🎯 Core Features
+- **Advanced Property Search** - Multi-criteria search with filters for bedrooms, price range, amenities, and location
+- **User Authentication** - Secure login/logout with session management
+- **Property Listings** - Beautiful property cards with detailed information
+- **Responsive Design** - Mobile-first design that works on all devices
+- **Real-time Notifications** - In-app notification system for updates and alerts
 
-- **User Authentication and Authorization**: Secure login and role-based access control.
-- **Apartment Application Management**: Facilitates the application process for apartments.
-- **Apply for Lease**: Enables users to apply for lease agreements.
-- **Different User Roles**: Supports various user roles with distinct permissions.
-- **Find and Track Application Status**: Allows users to locate and monitor the status of their applications.
-- **View Lease Information**: Provides users with access to information about their leases.
-- **Raise Complaints**: Users can submit complaints regarding their lease or living conditions.
-- **Lease Payment Management**: Helps users manage their lease payments efficiently.
-- **Admin Complaint Management**: Admins can oversee and address user complaints.
-- **Update Lease Status**: Admins have the authority to modify the status of leases.
-- **Terminate Lease**: Admins can initiate the termination of lease agreements.
-- **Add and Edit Housing Options**: Admins can add new housing options and modify existing ones.
-- **Filter Houses**: Allows users to filter available housing options based on criteria such as the number of bedrooms and available date.
-- **Transaction Tracking and History**: Tracks and maintains a history of all lease-related transactions.
-- **Secure Payment Processing**: Ensures secure processing of lease payments.
-- **User-Friendly Interface**: Offers an intuitive interface for easy navigation and usage.
+### 🏗️ Architecture Improvements
+- **Modular Structure** - Organized codebase with clear separation of concerns
+- **Custom Hooks** - Reusable logic for authentication, apartments, and notifications
+- **Service Layer** - Centralized API calls with error handling
+- **Error Boundaries** - Graceful error handling throughout the application
+- **Context API** - Global state management for auth and notifications
 
-## Technologies Used
+### 🎨 UI/UX Enhancements
+- **Material-UI Theme** - Consistent design system with custom theming
+- **Loading States** - Smooth loading indicators and skeleton screens
+- **Animations** - Fade-in effects and smooth transitions
+- **Modern Cards** - Enhanced property cards with hover effects
+- **Search Bar** - Advanced search with autocomplete and filters
 
-- **Frontend:**
-  - React
-  - Material-UI
+### 🔧 Technical Features
+- **Protected Routes** - Route protection based on authentication status
+- **Form Validation** - Comprehensive form validation and error handling
+- **API Integration** - RESTful API integration with axios
+- **Performance Optimization** - React.memo, useMemo, and useCallback usage
+- **Code Quality** - ESLint and Prettier for code formatting
 
-- **Backend:**
-  - Node.js
-  - Express
-  - MongoDB
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-
-Ensure you have the following installed:
-
-- Node.js (v14 or later)
-- MongoDB
+- Node.js (v14 or higher)
+- npm or yarn
 
 ### Installation
 
-1. **Clone the repositories:**
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd house-rentals
+   ```
 
-    ```bash
-    git clone https://github.com/Hrithik/house-rentals.git
-    cd lease-management
-    ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-2. **Install dependencies:**
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-    For the backend:
+4. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-    ```bash
-    npm install
-    ```
+### Available Scripts
 
-    For the frontend:
+- `npm start` - Start development server
+- `npm build` - Build for production
+- `npm test` - Run tests
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Fix ESLint errors
+- `npm run format` - Format code with Prettier
 
-    ```bash
-    npm install
-    ```
+## 📁 Project Structure
 
-3. **Configure environment variables:**
-
-    Create a `.env` file in the `backend` directory and add the following:
-
-    ```env
-    PORT=3001
-    MONGO_URI=your_mongodb_connection_string
-    JWT_SECRET=your_jwt_secret
-    ```
-
-### Running the Application
-
-1. **Start the backend server:**
-
-    ```bash
-    cd backend
-    npm start
-    ```
-
-    The backend server should now be running on `http://localhost:3001`.
-
-2. **Start the frontend development server:**
-
-    ```bash
-    cd ../frontend
-    npm start
-    ```
-
-    The frontend development server should now be running on `http://localhost:3000`.
-
-## API Endpoints
-
-### User Authentication
-
-- `POST /api/users/register` - Register a new user
-- `POST /api/users/login` - User login
-
-### Payments
-
-- `GET /api/payments/:userId` - Get all payments for a user
-- `PUT /api/updatePayment/:id` - Update payment status and transaction ID
-
-### Example
-
-To update a payment:
-
-```http
-PUT /api/updatePayment/:id
-Content-Type: application/json
-
-{
-  "status": "Paid",
-  "transactionId": "TX1234"
-}
+```
+src/
+├── components/
+│   ├── common/           # Reusable components
+│   │   ├── ApartmentCard.js
+│   │   ├── ErrorBoundary.js
+│   │   ├── LoadingSpinner.js
+│   │   ├── NotificationSystem.js
+│   │   └── SearchBar.js
+│   ├── Header.js
+│   ├── Footer.js
+│   ├── MainPage.js
+│   ├── HomePage.js
+│   └── ...               # Other page components
+├── hooks/                # Custom React hooks
+│   ├── useAuth.js
+│   ├── useApartments.js
+│   └── useNotifications.js
+├── services/             # API services
+│   ├── apartmentService.js
+│   └── complaintService.js
+├── utils/                # Utility functions
+│   └── formatters.js
+├── constants.js
+└── App.js
 ```
 
-Backend is available at https://github.com/srinivastherapati/LeaseManagement
+## 🎯 Key Components
 
+### Custom Hooks
 
-## Screenshots
+#### `useAuth`
+Manages authentication state and provides login/logout functionality.
 
-<div align="center">
-    <img src="public/screenshots/1.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/2.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/3.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/4.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/5.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/6.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/7.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/8.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/9.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/10.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/11.jpeg" width="400px"</img> 
-</div>
-<div align="center">
-    <img src="public/screenshots/12.jpeg" width="400px"</img> 
-</div>
+```javascript
+const { user, isAuthenticated, login, logout } = useAuth();
+```
 
-## Contact
-For any questions or suggestions, please contact
-Hrithik Manda,
-mandhahrithik@gmail.com
-LinkedIn : https://www.linkedin.com/in/hrithik-manda/
+#### `useApartments`
+Handles apartment data fetching, filtering, and state management.
+
+```javascript
+const { apartments, loading, error, updateFilters } = useApartments();
+```
+
+#### `useNotifications`
+Manages in-app notifications with different types and auto-dismissal.
+
+```javascript
+const { addNotification, notifications, unreadCount } = useNotifications();
+```
+
+### Service Layer
+
+#### `apartmentService`
+Centralized API calls for apartment-related operations.
+
+```javascript
+import { apartmentService } from '../services/apartmentService';
+
+// Get all available apartments
+const apartments = await apartmentService.getAvailableApartments();
+
+// Get apartment by ID
+const apartment = await apartmentService.getApartmentById(id);
+```
+
+### Common Components
+
+#### `ApartmentCard`
+Reusable property card component with modern design.
+
+```javascript
+<ApartmentCard
+  apartment={apartment}
+  onClick={() => handleClick(apartment.id)}
+  onApplyNow={() => handleApply(apartment)}
+/>
+```
+
+#### `SearchBar`
+Advanced search component with filters and autocomplete.
+
+```javascript
+<SearchBar
+  onSearch={handleSearch}
+  onFiltersChange={handleFiltersChange}
+  placeholder="Search apartments..."
+/>
+```
+
+## 🎨 Theming
+
+The application uses Material-UI theming with custom colors and component overrides:
+
+```javascript
+const theme = createTheme({
+  palette: {
+    primary: { main: '#1976d2' },
+    secondary: { main: '#dc004e' },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: { textTransform: 'none', borderRadius: 8 },
+      },
+    },
+  },
+});
+```
+
+## 🔐 Authentication
+
+The app implements a complete authentication system:
+
+- **Login/Logout** - Secure authentication with session management
+- **Protected Routes** - Automatic redirection for unauthenticated users
+- **Session Persistence** - User sessions persist across browser sessions
+- **Route Guards** - Public and protected route components
+
+## 📱 Responsive Design
+
+The application is fully responsive with:
+
+- **Mobile-First** - Designed for mobile devices first
+- **Breakpoint System** - Uses Material-UI's responsive breakpoints
+- **Touch-Friendly** - Optimized for touch interactions
+- **Progressive Enhancement** - Enhanced features on larger screens
+
+## 🚀 Performance Optimizations
+
+- **React.memo** - Prevents unnecessary re-renders
+- **useMemo/useCallback** - Optimizes expensive calculations and callbacks
+- **Lazy Loading** - Components loaded on demand
+- **Image Optimization** - Optimized images with fallbacks
+- **Debounced Search** - Prevents excessive API calls
+
+## 🧪 Testing
+
+The application includes:
+
+- **Unit Tests** - Component and utility function tests
+- **Integration Tests** - API integration tests
+- **Error Handling** - Comprehensive error boundaries and fallbacks
+
+## 📦 Dependencies
+
+### Core Dependencies
+- **React 18** - Latest React with hooks and concurrent features
+- **Material-UI 5** - Modern UI component library
+- **React Router 6** - Client-side routing
+- **Axios** - HTTP client for API calls
+
+### Development Dependencies
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Testing Library** - React testing utilities
+
+## 🔧 Configuration
+
+### Environment Variables
+Create a `.env` file in the root directory:
+
+```env
+REACT_APP_API_URL=http://localhost:3001
+REACT_APP_ENVIRONMENT=development
+```
+
+### API Configuration
+The application expects a RESTful API with the following endpoints:
+
+- `GET /api/apartments/available` - Get available apartments
+- `GET /api/apartments/:id` - Get apartment details
+- `POST /api/login` - User authentication
+- `POST /api/register` - User registration
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Material-UI for the excellent component library
+- React team for the amazing framework
+- The open-source community for inspiration and tools
+
+---
+
+**Built with ❤️ using React and Material-UI**
 
