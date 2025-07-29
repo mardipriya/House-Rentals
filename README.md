@@ -245,3 +245,8 @@ The application expects a RESTful API with the following endpoints:
 - `GET /api/apartments/:id` - Get apartment details
 - `POST /api/login` - User authentication
 - `POST /api/register` - User registration
+
+SCREENSHOTS
+
+<img width="420" height="688" alt="image" src="https://github.com/user-attachments/assets/182edbf3-e79d-4159-86ac-ae0bb4d38974" />
+
