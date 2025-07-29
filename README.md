@@ -246,12 +246,14 @@ The application expects a RESTful API with the following endpoints:
 - `POST /api/login` - User authentication
 - `POST /api/register` - User registration
 
+## Screenshots
+
 <div style="
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 1rem;          /* space between images */
-  flex-wrap: wrap;    /* wrap to next line if viewport is narrow */
+  gap: 1rem;
+  flex-wrap: wrap;
 ">
   <img
     src="https://github.com/user-attachments/assets/182edbf3-e79d-4159-86ac-ae0bb4d38974"
@@ -274,7 +276,3 @@ The application expects a RESTful API with the following endpoints:
     style="width:200px; height:auto;"
   />
 </div>
-
-
-
-
